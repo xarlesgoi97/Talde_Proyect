@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "383965287267",
+    "firebase_url": "https://prueba-82b36.firebaseio.com",
+    "project_id": "prueba-82b36",
+    "storage_bucket": "prueba-82b36.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:383965287267:android:f46a92617bd14813",
+        "android_client_info": {
+          "package_name": "com.example.sasiroot.talde_proyect"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "383965287267-ska9sbmthpa9j2m5qt033if2k96p2r76.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.sasiroot.talde_proyect",
+            "certificate_hash": "fed3c291c1d91050f1a011d991b30b3ac3e2bae4"
+          }
+        },
+        {
+          "client_id": "383965287267-qerogk8318brqhs676tu3btem2esu6kk.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC2qxvF2SIK-X896u-sog2FcgstN5AgEDM"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "383965287267-qerogk8318brqhs676tu3btem2esu6kk.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

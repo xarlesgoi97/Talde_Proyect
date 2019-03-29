@@ -17,6 +17,9 @@ import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.Toast;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+
 import java.util.Date;
 import java.util.Locale;
 
@@ -24,6 +27,8 @@ public class LoginActivity extends AppCompatActivity {
     private final static int REQUEST_SETTINGS = 0;
     private final static int REQUEST_THEMES = 1;
     private final static int REQUEST_LANGUAGES = 2;
+
+
     private EditText password;
     private EditText username;
     private Button join;
@@ -44,6 +49,7 @@ public class LoginActivity extends AppCompatActivity {
         this.join = this.findViewById(R.id.join);
         this.create_acc = this.findViewById(R.id.create_acc);
         this.skip = this.findViewById(R.id.skip);
+
     }
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -113,5 +119,7 @@ public class LoginActivity extends AppCompatActivity {
         Intent i = new Intent(this, CreateaccActivity.class);
         this.startActivity(i);
     }
+
+
 }
 
