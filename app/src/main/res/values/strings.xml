@@ -23,5 +23,8 @@
         <item>AppTheme.CustomT</item>
     </string-array>
 
+    <!-- Facebook application ID and custom URL scheme (app ID prefixed by 'fb'). -->
+    <string name="facebook_application_id" translatable="false">635670813543287</string>
+    <string name="facebook_login_protocol_scheme" translatable="false">fb635670813543287</string>
 
 </resources>
