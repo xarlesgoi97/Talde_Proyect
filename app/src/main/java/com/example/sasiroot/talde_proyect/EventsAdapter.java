@@ -37,7 +37,7 @@ public class EventsAdapter extends ArrayAdapter<Event> {
         TextView name = (TextView) convertView.findViewById(R.id.nombre);
         TextView title = (TextView) convertView.findViewById(R.id.lugar);
         TextView company = (TextView) convertView.findViewById(R.id.fecha);
-        ImageView compartir = (ImageView) convertView.findViewById(R.id.compartir);
+
 
         // Lead actual.
         Event event = getItem(position);

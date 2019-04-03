@@ -13,11 +13,19 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.ListView;
+import android.widget.Toast;
+
+import com.hudomju.swipe.SwipeToDismissTouchListener;
+import com.hudomju.swipe.adapter.ListViewAdapter;
 
 import java.util.ArrayList;
+
+import static android.widget.Toast.LENGTH_SHORT;
 
 public class EventActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -25,12 +33,16 @@ public class EventActivity extends AppCompatActivity
     protected ListView eventlist;
     protected ArrayList<Event> events;
     protected ArrayAdapter eventAdapter;
+    protected Button star;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_event);
         this.setTitle(R.string.app_name);
+        this.star = this.findViewById(R.id.star);
+
+
 
         this.events = new ArrayList<>();
         this.events.add(new Event("Lekeitioko Jaiak", "Lekeitio", "19/09/07", R.drawable.ic_add_black_24dp));
@@ -41,6 +53,23 @@ public class EventActivity extends AppCompatActivity
         this.events.add(new Event("Lekeitioko Jaiak", "Lekeitio", "19/09/07", R.drawable.ic_add_black_24dp));
         this.events.add(new Event("Lekeitioko Jaiak", "Lekeitio", "19/09/07", R.drawable.ic_add_black_24dp));
         this.events.add(new Event("Lekeitioko Jaiak", "Lekeitio", "19/09/07", R.drawable.ic_add_black_24dp));
+        this.events.add(new Event("Lekeitioko Jaiak", "Lekeitio", "19/09/07", R.drawable.ic_add_black_24dp));
+        this.events.add(new Event("Lekeitioko Jaiak", "Lekeitio", "19/09/07", R.drawable.ic_add_black_24dp));
+        this.events.add(new Event("Lekeitioko Jaiak", "Lekeitio", "19/09/07", R.drawable.ic_add_black_24dp));
+        this.events.add(new Event("Lekeitioko Jaiak", "Lekeitio", "19/09/07", R.drawable.ic_add_black_24dp));
+        this.events.add(new Event("Lekeitioko Jaiak", "Lekeitio", "19/09/07", R.drawable.ic_add_black_24dp));
+        this.events.add(new Event("Lekeitioko Jaiak", "Lekeitio", "19/09/07", R.drawable.ic_add_black_24dp));
+        this.events.add(new Event("Lekeitioko Jaiak", "Lekeitio", "19/09/07", R.drawable.ic_add_black_24dp));
+        this.events.add(new Event("Lekeitioko Jaiak", "Lekeitio", "19/09/07", R.drawable.ic_add_black_24dp));
+        this.events.add(new Event("Lekeitioko Jaiak", "Lekeitio", "19/09/07", R.drawable.ic_add_black_24dp));
+        this.events.add(new Event("Lekeitioko Jaiak", "Lekeitio", "19/09/07", R.drawable.ic_add_black_24dp));
+        this.events.add(new Event("Lekeitioko Jaiak", "Lekeitio", "19/09/07", R.drawable.ic_add_black_24dp));
+        this.events.add(new Event("Lekeitioko Jaiak", "Lekeitio", "19/09/07", R.drawable.ic_add_black_24dp));
+        this.events.add(new Event("Lekeitioko Jaiak", "Lekeitio", "19/09/07", R.drawable.ic_add_black_24dp));
+        this.events.add(new Event("Lekeitioko Jaiak", "Lekeitio", "19/09/07", R.drawable.ic_add_black_24dp));
+        this.events.add(new Event("Lekeitioko Jaiak", "Lekeitio", "19/09/07", R.drawable.ic_add_black_24dp));
+
+
 
 
 
@@ -54,23 +83,44 @@ public class EventActivity extends AppCompatActivity
         this.eventlist.setAdapter(eventAdapter);
 
 
+        final SwipeToDismissTouchListener<ListViewAdapter> touchListener =
+                new SwipeToDismissTouchListener<>(
+                        new ListViewAdapter(eventlist),
+                        new SwipeToDismissTouchListener.DismissCallbacks<ListViewAdapter>() {
+                            @Override
+                            public boolean canDismiss(int position) {
+                                return true;
+                            }
+
+                            @Override
+                            public void onDismiss(ListViewAdapter view, int position) {
+                                events.remove(position);
+                            }
+                        });
+
+        eventlist.setOnTouchListener(touchListener);
+        eventlist.setOnScrollListener((AbsListView.OnScrollListener) touchListener.makeScrollListener());
         eventlist.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            public void onItemClick(AdapterView<?> list, View v, int pos, long id) {
-                finish();
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+
+
+
+                if (touchListener.existPendingDismisses()) {
+                    touchListener.undoPendingDismiss();
+                } else {
+                    Toast.makeText(EventActivity.this, "Position " + position, LENGTH_SHORT).show();
+                    info();
+                }
             }
+
+
         });
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });
+
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
@@ -80,7 +130,11 @@ public class EventActivity extends AppCompatActivity
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+
+
     }
+
+
 
     @Override
     public void onBackPressed() {
@@ -95,9 +149,7 @@ public class EventActivity extends AppCompatActivity
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.event, menu);
-        this.getMenuInflater().inflate(R.menu.add_menu, menu);
-        this.getMenuInflater().inflate(R.menu.delete_menu, menu);
+
 
 
         return true;
@@ -149,4 +201,23 @@ public class EventActivity extends AppCompatActivity
         this.startActivity(i);
 
     }
+
+    public void star(View view) {
+
+        if(view.isActivated()){
+            view.setActivated(false);
+        }else{
+            view.setActivated(true);
+            Toast.makeText(this, "Añadiendo a favoritos", Snackbar.LENGTH_LONG).show();
+
+        }
+
+    }
+    private void info() {
+        Intent i = new Intent(this, LoginActivity.class);
+        this.startActivity(i);
+    }
+
+
+
 }
