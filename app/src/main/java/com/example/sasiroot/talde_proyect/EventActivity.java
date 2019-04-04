@@ -45,7 +45,7 @@ public class EventActivity extends AppCompatActivity
 
 
         this.events = new ArrayList<>();
-        this.events.add(new Event("Lekeitioko Jaiak", "Lekeitio", "19/09/07", R.drawable.ic_add_black_24dp));
+        this.events.add(new Event("Lekeitioko Jaiak", "Lekeitio", "19/09/07", R.mipmap.ic_leke));
         this.events.add(new Event("Lekeitioko Jaiak", "Lekeitio", "19/09/07", R.drawable.ic_add_black_24dp));
         this.events.add(new Event("Lekeitioko Jaiak", "Lekeitio", "19/09/07", R.drawable.ic_add_black_24dp));
         this.events.add(new Event("Lekeitioko Jaiak", "Lekeitio", "19/09/07", R.drawable.ic_add_black_24dp));
