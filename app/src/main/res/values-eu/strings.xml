@@ -4,7 +4,6 @@
     <string name="langs">Hizkuntzak</string>
     <string name="themes">Temak</string>
     <string name="settings">Ezarpenak</string>
-    <string name="scores">Puntuaketak</string>
     <string name="join">Hasi sasoia</string>
     <string name="create_acc">Sortu kontua</string>
     <string name="username">Erabiltzailea</string>
@@ -14,8 +13,4 @@
     <string name="cancel">Deuseztatu</string>
     <string name="repeatPass">Errepikatu pasahitza</string>
 
-    <!-- Game strings -->
-    <string name="level">Nibela</string>
-    <string name="touch_screen">Pantaila ikustu jarraitzeko</string>
-    <string name="last_puntuation">Atzen puntuazioa:</string>
 </resources>

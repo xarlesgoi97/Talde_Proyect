@@ -22,7 +22,6 @@ public class prueba extends AppCompatActivity {
 
 
     //botones
-    private Button btnSignUp;
     private Button btnSignIn;
     private Button btnSignOut;
 
@@ -33,8 +32,10 @@ public class prueba extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_prueba);
 
+
+
+
     //instanciar objetos
-        this.btnSignUp = this.findViewById(R.id.btnSignUp);
         this.btnSignIn = this.findViewById(R.id.btnSignIn);
         this.btnSignOut = this.findViewById(R.id.btnSignOut);
         this.textStatus = this.findViewById(R.id.textStatus);
@@ -48,16 +49,30 @@ public class prueba extends AppCompatActivity {
     //Funciones de botones
 
         //sign up
-        this.btnSignUp.setOnClickListener(new View.OnClickListener() {
+        this.btnSignIn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 // Create and launch sign-in intent
+
                 startActivityForResult(
                         AuthUI.getInstance()
                                 .createSignInIntentBuilder()
                                 .setAvailableProviders(providers)
                                 .build(),
                         RC_SIGN_IN);
+                updateUI(mAuth.getCurrentUser());
+
+
+            }
+
+
+        });
+        this.btnSignOut.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                // Create and launch sign-in intent
+                FirebaseAuth.getInstance().signOut();
+                updateUI(mAuth.getCurrentUser());
             }
         });
 
@@ -73,6 +88,7 @@ public class prueba extends AppCompatActivity {
             if (resultCode == RESULT_OK) {
                 // Successfully signed in
                 FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+                event();
                 // ...
             } else {
                 // Sign in failed. If response is null the user canceled the
@@ -81,6 +97,14 @@ public class prueba extends AppCompatActivity {
                 // ...
             }
         }
+    }
+
+    private void event() {
+        Intent i = new Intent(this,EventsActivity.class);
+        i.putExtra("user_name", mAuth.getCurrentUser().getDisplayName());
+        i.putExtra("user_photo", mAuth.getCurrentUser().getPhotoUrl().toString());
+
+        startActivityForResult(i,RESULT_OK);
     }
 
     @Override
@@ -93,19 +117,17 @@ public class prueba extends AppCompatActivity {
     private void updateUI(FirebaseUser user) {
 //        hideProgressDialog();
         if (user != null) {
-            textStatus.setText(user.getEmail());
-            textDetail.setText(user.getUid());
-
-            findViewById(R.id.btnSignIn).setVisibility(View.GONE);
-            findViewById(R.id.btnSignOut).setVisibility(View.VISIBLE);
+//            textStatus.setText(user.getEmail());
+//            textDetail.setText(user.getUid());
+            event();
         } else {
             textStatus.setText("signed out");
             textDetail.setText(null);
 
-            findViewById(R.id.btnSignIn).setVisibility(View.VISIBLE);
-            findViewById(R.id.btnSignOut).setVisibility(View.GONE);
+
         }
     }
+
 
 
 
