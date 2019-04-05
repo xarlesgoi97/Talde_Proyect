@@ -4,7 +4,7 @@ android {
     compileSdkVersion 26
     defaultConfig {
         applicationId "com.example.sasiroot.talde_proyect"
-        minSdkVersion 21
+        minSdkVersion 26
         targetSdkVersion 26
         versionCode 1
         versionName "1.0"
@@ -28,11 +28,11 @@ dependencies {
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
     //FIREBASE
     implementation 'com.google.firebase:firebase-core:16.0.1'
+        //auth
     implementation 'com.firebaseui:firebase-ui-auth:4.1.0'
-    //FACEBOOK
+        //facebook
     implementation 'com.facebook.android:facebook-android-sdk:4.41.0'
-
-
+        //database
     implementation 'com.google.firebase:firebase-database:16.0.1'
 
 

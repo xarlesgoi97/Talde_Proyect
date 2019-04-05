@@ -5,9 +5,9 @@ import android.net.Uri;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -15,11 +15,28 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.util.Date;
+
 public class EventsActivity extends AppCompatActivity {
 
-    private Button logout;
-    private TextView userName;
-    private ImageView userPhoto;
+    //BUTTONS, IMAGEVIEW, TEXTVIEW
+    private Button btnLogout;
+    private Button btnSend;
+    //EVENT DATA
+    private EditText txtTitle;
+    private EditText txtCity;
+    private EditText txtWhere;
+    private EditText txtEventStart;
+    private EditText txtEventEnd;
+    private EditText txtDescription;
+    private TextView txtUserName;
+
+    private ImageView imgUserPhoto;
+
+
+    //FIREBASE DB
     private DatabaseReference mDatabase;
 
     @Override
@@ -28,18 +45,32 @@ public class EventsActivity extends AppCompatActivity {
         setContentView(R.layout.activity_events);
         this.setTitle(R.string.app_name);
 
-        this.logout = findViewById(R.id.logout);
-        this.userName = findViewById(R.id.user_name);
-        this.userPhoto = findViewById(R.id.user_photo);
+        this.btnLogout = findViewById(R.id.logout);
+        this.txtUserName = findViewById(R.id.user_name);
+        this.imgUserPhoto = findViewById(R.id.user_photo);
+        this.btnSend = findViewById(R.id.btnSend);
+        this.txtTitle = findViewById(R.id.txtTitle);
+        this.txtCity = findViewById(R.id.txtCity);
+        this.txtWhere = findViewById(R.id.txtWhere);
+        this.txtEventStart = findViewById(R.id.txtEventStart);
+        this.txtEventEnd = findViewById(R.id.txtEventEnd);
+        this.txtDescription = findViewById(R.id.txtDescription);
+
 
         mDatabase = FirebaseDatabase.getInstance().getReference();
 
 
-        logout.setOnClickListener(new View.OnClickListener() {
+        btnLogout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 FirebaseAuth.getInstance().signOut();
                 prueba();
+            }
+        });
+        btnSend.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                writeEvent(txtTitle.getText().toString(),txtCity.getText().toString(),txtWhere.getText().toString(),txtEventStart.getText().toString(),txtEventEnd.getText().toString(),txtDescription.getText().toString(), new Date());
             }
         });
 
@@ -49,9 +80,9 @@ public class EventsActivity extends AppCompatActivity {
         String userNameFirebase = intent.getStringExtra("user_name");
         Uri userPhotoFirebase = Uri.parse(extras.getString("user_photo"));
 
-        userName.setText(userNameFirebase);
+        txtUserName.setText(userNameFirebase);
 
-        userPhoto.setImageURI(userPhotoFirebase);
+        imgUserPhoto.setImageURI(userPhotoFirebase);
     }
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -61,15 +92,23 @@ public class EventsActivity extends AppCompatActivity {
     }
 
     private void prueba() {
-        Intent i = new Intent(this,prueba.class);
+        Intent i = new Intent(this,Prueba.class);
 
         startActivity(i);
     }
 
-    private void writeNewUser(String eventID, String name, String lugar) {
-        Event event = new Event(name, lugar);
 
-        mDatabase.child("events").child(eventID).setValue(event);
+    private void writeEvent(/*Long idEvent,*/String title, String city, String where,  String eventStart, String eventEnd, String description/*, Uri photo*/, Date createDate) {
+        Event event = new Event(/*idEvent,*/title, city, where, eventStart, eventEnd, description/*, photo*/, createDate);
+        /*event.setTitle(title);
+        event.setCity(city);
+        event.setWhere(where);
+        event.setDescription(description);
+        event.setEventStart(eventStart);
+        event.setEventEnd(eventEnd);
+        event.setCreateDate(new Date());*/
+
+        mDatabase.child("events").child("event").setValue(event);
     }
 
 }
