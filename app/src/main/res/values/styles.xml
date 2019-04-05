@@ -30,7 +30,6 @@
     </style>
 
 
-
     <style name="RadioButton" parent="Base.Widget.AppCompat.CompoundButton.RadioButton">
         <item name="android:gravity">center</item>
     </style>

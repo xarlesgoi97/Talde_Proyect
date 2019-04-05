@@ -1,9 +1,14 @@
 package com.example.sasiroot.talde_proyect;
 
+import android.arch.lifecycle.Lifecycle;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.Point;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.view.Display;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -42,12 +47,26 @@ public class EventActivity extends AppCompatActivity
         this.setTitle(R.string.app_name);
         this.star = this.findViewById(R.id.star);
 
+        Point screen;
+        screen = new Point();
+        Display display = this.getWindowManager().getDefaultDisplay();
+        display.getSize(screen);
 
+        BitmapFactory.Options opts = new BitmapFactory.Options();
+        Bitmap b = BitmapFactory.decodeResource(this.getResources(), R.mipmap.ic_lekeitio1, opts);
+
+
+        int tWidth  = b.getWidth();
+        int tHeight = b.getHeight();
+        int sWidth  = screen.x;
+
+        int p = (sWidth * 100) / tWidth;
+        int sHeight = (b.getHeight() * p)/100;
+        Bitmap bitmap = Bitmap.createScaledBitmap(b, screen.x, sHeight,false );
 
         this.events = new ArrayList<>();
-        this.events.add(new Event("Lekeitioko Jaiak", "Lekeitio", "19/09/07", R.mipmap.ic_leke));
-        this.events.add(new Event("Lekeitioko Jaiak", "Lekeitio", "19/09/07", R.drawable.ic_add_black_24dp));
-        this.events.add(new Event("Lekeitioko Jaiak", "Lekeitio", "19/09/07", R.drawable.ic_add_black_24dp));
+        this.events.add(new Event("Lekeitioko Jaiak", "Lekeitio", "19/09/07",R.mipmap.ic_lekeitio1));
+        this.events.add(new Event("Lekeitioko Jaiak", "Lekeitio", "19/09/07", R.mipmap.ic_lekeitio1));
         this.events.add(new Event("Lekeitioko Jaiak", "Lekeitio", "19/09/07", R.drawable.ic_add_black_24dp));
         this.events.add(new Event("Lekeitioko Jaiak", "Lekeitio", "19/09/07", R.drawable.ic_add_black_24dp));
         this.events.add(new Event("Lekeitioko Jaiak", "Lekeitio", "19/09/07", R.drawable.ic_add_black_24dp));
@@ -82,6 +101,15 @@ public class EventActivity extends AppCompatActivity
         this.eventlist = this.findViewById(R.id.eventList);
         this.eventlist.setAdapter(eventAdapter);
 
+        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
+                        .setAction("Action", null).show();
+            }
+        });
+
 
         final SwipeToDismissTouchListener<ListViewAdapter> touchListener =
                 new SwipeToDismissTouchListener<>(
@@ -110,7 +138,7 @@ public class EventActivity extends AppCompatActivity
                     touchListener.undoPendingDismiss();
                 } else {
                     Toast.makeText(EventActivity.this, "Position " + position, LENGTH_SHORT).show();
-                    info();
+                    info(position);
                 }
             }
 
@@ -213,9 +241,12 @@ public class EventActivity extends AppCompatActivity
         }
 
     }
-    private void info() {
-        Intent i = new Intent(this, LoginActivity.class);
-        this.startActivity(i);
+    private void info(Integer position) {
+        Intent i = new Intent(this, InfoActivity.class);
+        Event event = (Event) eventlist.getItemAtPosition(position);
+        i.putExtra("event", event);
+
+        this.startActivityForResult(i,RESULT_OK);
     }
 
 

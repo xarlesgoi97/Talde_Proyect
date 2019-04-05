@@ -49,6 +49,7 @@ public class EventsAdapter extends ArrayAdapter<Event> {
         company.setText(event.getFecha());
 
         avatar.setImageResource(event.getImagen());
+        //avatar.setImageBitmap(event.getBitmap());
 
         return convertView;
     }

@@ -1,8 +1,14 @@
 package com.example.sasiroot.talde_proyect;
 
+import android.graphics.Bitmap;
+import android.widget.ListView;
+
+import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Date;
 
-public class Event {
+public class Event implements Serializable{
+    private Bitmap bitmap;
     private String nombre;
     private String lugar;
     private String fecha;
@@ -14,6 +20,7 @@ public class Event {
         this.fecha = fecha;
         this.imagen = imagen;
     }
+
 
     public String getNombre() {
         return nombre;
@@ -54,5 +61,9 @@ public class Event {
                 ", Lugar='" + getLugar() + '\'' +
                 ", Fecha='" + getFecha() + '\'' +
                 '}';
+    }
+
+    public Bitmap getBitmap() {
+        return bitmap;
     }
 }
