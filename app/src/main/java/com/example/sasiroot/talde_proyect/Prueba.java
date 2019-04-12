@@ -100,7 +100,7 @@ public class Prueba extends AppCompatActivity {
     }
 
     private void event() {
-        Intent i = new Intent(this,AddEventActivity.class);
+        Intent i = new Intent(this,EventActivity.class);
         i.putExtra("user_name", mAuth.getCurrentUser().getDisplayName());
         i.putExtra("user_photo", mAuth.getCurrentUser().getPhotoUrl().toString());
 

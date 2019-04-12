@@ -20,7 +20,10 @@
         <activity android:name=".AddEventActivity">
 
 
+
         </activity>
+        <activity android:name=".EventActivity"/>
+        <activity android:name=".InfoActivity"/>
         <activity android:name=".CreateaccActivity" />
         <activity android:name=".Prueba">
             <intent-filter>

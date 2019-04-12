@@ -44,11 +44,11 @@ public class EventsAdapter extends ArrayAdapter<Event> {
 
         // Setup.
 
-        name.setText(event.getNombre());
-        title.setText(event.getLugar());
-        company.setText(event.getFecha());
+        name.setText(event.getTitle());
+        //title.setText(event.getLugar());
+        //company.setText(event.getFecha());
 
-        avatar.setImageResource(event.getImagen());
+        //avatar.setImageResource(event.getImagen());
         //avatar.setImageBitmap(event.getBitmap());
 
         return convertView;

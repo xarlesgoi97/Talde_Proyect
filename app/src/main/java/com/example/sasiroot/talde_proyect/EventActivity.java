@@ -29,6 +29,7 @@ import com.hudomju.swipe.SwipeToDismissTouchListener;
 import com.hudomju.swipe.adapter.ListViewAdapter;
 
 import java.util.ArrayList;
+import java.util.Date;
 
 import static android.widget.Toast.LENGTH_SHORT;
 
@@ -65,9 +66,8 @@ public class EventActivity extends AppCompatActivity
         Bitmap bitmap = Bitmap.createScaledBitmap(b, screen.x, sHeight,false );
 
         this.events = new ArrayList<>();
-        this.events.add(new Event("Lekeitioko Jaiak", "Lekeitio", "19/09/07",R.mipmap.ic_lekeitio1,"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"));
-        this.events.add(new Event("Lekeitioko Jaiak", "Lekeitio", "19/09/07", R.mipmap.ic_lekeitio1,"sdhfuodshfsdhfuh"));
 
+        this.events.add(new Event("Lekeitioko Jaiak", "Lekeitio", "19/09/07","Eskolapian","22:15","02:00","Lekeitioko jaiak onenak dira", new Date()));
 
 
 
@@ -86,8 +86,7 @@ public class EventActivity extends AppCompatActivity
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
+               addEvent();
             }
         });
 
@@ -127,7 +126,7 @@ public class EventActivity extends AppCompatActivity
         });
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
+        //setSupportActionBar(toolbar);
 
 
 
@@ -143,6 +142,10 @@ public class EventActivity extends AppCompatActivity
 
     }
 
+    private void addEvent() {
+        Intent i = new Intent(this, AddEventActivity.class);
+        this.startActivity(i);
+    }
 
 
     @Override

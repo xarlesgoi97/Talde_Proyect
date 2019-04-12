@@ -86,12 +86,12 @@ public class AddEventActivity extends AppCompatActivity {
         Intent intent = getIntent();
         Bundle extras = intent.getExtras();
 
-        String userNameFirebase = intent.getStringExtra("user_name");
-        Uri userPhotoFirebase = Uri.parse(extras.getString("user_photo"));
+//        String userNameFirebase = intent.getStringExtra("user_name");
+//        Uri userPhotoFirebase = Uri.parse(extras.getString("user_photo"));
 
-        txtUserName.setText(userNameFirebase);
+//        txtUserName.setText(userNameFirebase);
 
-        imgUserPhoto.setImageURI(userPhotoFirebase);
+//        imgUserPhoto.setImageURI(userPhotoFirebase);
     }
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

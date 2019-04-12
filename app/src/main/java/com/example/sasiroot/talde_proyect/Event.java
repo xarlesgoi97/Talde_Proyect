@@ -2,9 +2,10 @@ package com.example.sasiroot.talde_proyect;
 
 import android.net.Uri;
 
+import java.io.Serializable;
 import java.util.Date;
 
-public class Event {
+public class Event implements Serializable {
 
     public Long idEvent;
     public String title;
@@ -33,8 +34,7 @@ public class Event {
         this.createDate = createDate;
     }
 
-    public Event(String title) {
-    }
+
 
     public Long getIdEvent() {
         return idEvent;
@@ -116,5 +116,22 @@ public class Event {
 
     public void setWhere(String where) {
         this.where = where;
+    }
+
+
+    @Override
+    public String toString() {
+        return "Event{" +
+                "idEvent=" + idEvent +
+                ", title='" + title + '\'' +
+                ", city='" + city + '\'' +
+                ", eventDay='" + eventDay + '\'' +
+                ", where='" + where + '\'' +
+                ", description='" + description + '\'' +
+                ", eventStart='" + eventStart + '\'' +
+                ", eventEnd='" + eventEnd + '\'' +
+                ", photo=" + photo +
+                ", createDate=" + createDate +
+                '}';
     }
 }
