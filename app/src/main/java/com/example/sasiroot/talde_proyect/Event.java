@@ -12,13 +12,15 @@ public class Event implements Serializable{
     private String nombre;
     private String lugar;
     private String fecha;
+    private String descripcion;
     private int imagen;
 
-    public Event(String nombre, String lugar, String fecha, int imagen) {
+    public Event(String nombre, String lugar, String fecha, int imagen, String descripcion) {
         this.nombre = nombre;
         this.lugar = lugar;
         this.fecha = fecha;
         this.imagen = imagen;
+        this.descripcion = descripcion;
     }
 
 
@@ -54,12 +56,21 @@ public class Event implements Serializable{
         this.imagen = imagen;
     }
 
+    public String getDescripcion() {
+        return descripcion;
+    }
+
+    public void setDescripcion(String descripcion) {
+        this.descripcion = descripcion;
+    }
+
     @Override
     public String toString() {
         return "Event{" +
                 ", Nombre='" + getNombre() + '\'' +
                 ", Lugar='" + getLugar() + '\'' +
                 ", Fecha='" + getFecha() + '\'' +
+                ", Descripcion='" + getDescripcion() + '\'' +
                 '}';
     }
 

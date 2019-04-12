@@ -65,28 +65,9 @@ public class EventActivity extends AppCompatActivity
         Bitmap bitmap = Bitmap.createScaledBitmap(b, screen.x, sHeight,false );
 
         this.events = new ArrayList<>();
-        this.events.add(new Event("Lekeitioko Jaiak", "Lekeitio", "19/09/07",R.mipmap.ic_lekeitio1));
-        this.events.add(new Event("Lekeitioko Jaiak", "Lekeitio", "19/09/07", R.mipmap.ic_lekeitio1));
-        this.events.add(new Event("Lekeitioko Jaiak", "Lekeitio", "19/09/07", R.drawable.ic_add_black_24dp));
-        this.events.add(new Event("Lekeitioko Jaiak", "Lekeitio", "19/09/07", R.drawable.ic_add_black_24dp));
-        this.events.add(new Event("Lekeitioko Jaiak", "Lekeitio", "19/09/07", R.drawable.ic_add_black_24dp));
-        this.events.add(new Event("Lekeitioko Jaiak", "Lekeitio", "19/09/07", R.drawable.ic_add_black_24dp));
-        this.events.add(new Event("Lekeitioko Jaiak", "Lekeitio", "19/09/07", R.drawable.ic_add_black_24dp));
-        this.events.add(new Event("Lekeitioko Jaiak", "Lekeitio", "19/09/07", R.drawable.ic_add_black_24dp));
-        this.events.add(new Event("Lekeitioko Jaiak", "Lekeitio", "19/09/07", R.drawable.ic_add_black_24dp));
-        this.events.add(new Event("Lekeitioko Jaiak", "Lekeitio", "19/09/07", R.drawable.ic_add_black_24dp));
-        this.events.add(new Event("Lekeitioko Jaiak", "Lekeitio", "19/09/07", R.drawable.ic_add_black_24dp));
-        this.events.add(new Event("Lekeitioko Jaiak", "Lekeitio", "19/09/07", R.drawable.ic_add_black_24dp));
-        this.events.add(new Event("Lekeitioko Jaiak", "Lekeitio", "19/09/07", R.drawable.ic_add_black_24dp));
-        this.events.add(new Event("Lekeitioko Jaiak", "Lekeitio", "19/09/07", R.drawable.ic_add_black_24dp));
-        this.events.add(new Event("Lekeitioko Jaiak", "Lekeitio", "19/09/07", R.drawable.ic_add_black_24dp));
-        this.events.add(new Event("Lekeitioko Jaiak", "Lekeitio", "19/09/07", R.drawable.ic_add_black_24dp));
-        this.events.add(new Event("Lekeitioko Jaiak", "Lekeitio", "19/09/07", R.drawable.ic_add_black_24dp));
-        this.events.add(new Event("Lekeitioko Jaiak", "Lekeitio", "19/09/07", R.drawable.ic_add_black_24dp));
-        this.events.add(new Event("Lekeitioko Jaiak", "Lekeitio", "19/09/07", R.drawable.ic_add_black_24dp));
-        this.events.add(new Event("Lekeitioko Jaiak", "Lekeitio", "19/09/07", R.drawable.ic_add_black_24dp));
-        this.events.add(new Event("Lekeitioko Jaiak", "Lekeitio", "19/09/07", R.drawable.ic_add_black_24dp));
-        this.events.add(new Event("Lekeitioko Jaiak", "Lekeitio", "19/09/07", R.drawable.ic_add_black_24dp));
+        this.events.add(new Event("Lekeitioko Jaiak", "Lekeitio", "19/09/07",R.mipmap.ic_lekeitio1,"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"));
+        this.events.add(new Event("Lekeitioko Jaiak", "Lekeitio", "19/09/07", R.mipmap.ic_lekeitio1,"sdhfuodshfsdhfuh"));
+
 
 
 

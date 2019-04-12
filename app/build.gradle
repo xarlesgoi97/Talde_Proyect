@@ -29,4 +29,5 @@ dependencies {
 
 
     implementation 'com.hudomju:swipe-to-dismiss-undo:1.0'
+    implementation 'com.google.android.gms:play-services-maps:16.1.0'
 }
