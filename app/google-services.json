@@ -23,6 +23,22 @@
           }
         },
         {
+          "client_id": "383965287267-s6v2ai201ti6fppv410bq1i1rf83fkbo.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.sasiroot.talde_proyect",
+            "certificate_hash": "f8027c5fc0c0b44759b49fe9b4e7f94775d709d0"
+          }
+        },
+        {
+          "client_id": "383965287267-ggoi4ro7o0a32kmmknpnnf8ulhm31qjt.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.sasiroot.talde_proyect",
+            "certificate_hash": "3b51163442b82764ff24b3f81768c962d8c7daf7"
+          }
+        },
+        {
           "client_id": "383965287267-qerogk8318brqhs676tu3btem2esu6kk.apps.googleusercontent.com",
           "client_type": 3
         }
@@ -33,20 +49,13 @@
         }
       ],
       "services": {
-        "analytics_service": {
-          "status": 1
-        },
         "appinvite_service": {
-          "status": 2,
           "other_platform_oauth_client": [
             {
               "client_id": "383965287267-qerogk8318brqhs676tu3btem2esu6kk.apps.googleusercontent.com",
               "client_type": 3
             }
           ]
-        },
-        "ads_service": {
-          "status": 2
         }
       }
     }
