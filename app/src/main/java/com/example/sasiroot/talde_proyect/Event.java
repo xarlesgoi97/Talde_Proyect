@@ -9,6 +9,7 @@ public class Event {
     public Long idEvent;
     public String title;
     public String city;
+    public String eventDay;
     public String where;
     public String description;
     public String eventStart;
@@ -17,14 +18,17 @@ public class Event {
     public Date createDate;
 
 
-    public Event(/*Long idEvent,*/ String title, String city, String where, String eventStart, String eventEnd, String description/*, Uri photo*/, Date createDate) {
+
+    public Event(/*Long idEvent,*/ String title, String city, String eventDay, String where, String eventStart, String eventEnd, String description/*, Uri photo*/, Date createDate) {
 //        this.idEvent = idEvent;
         this.title = title;
         this.city = city;
+        this.eventDay = eventDay;
         this.where = where;
         this.description = description;
         this.eventStart = eventStart;
         this.eventEnd = eventEnd;
+
 //        this.photo = photo;
         this.createDate = createDate;
     }
@@ -46,6 +50,14 @@ public class Event {
 
     public void setCity(String city) {
         this.city = city;
+    }
+
+    public String getEventDay() {
+        return eventDay;
+    }
+
+    public void setEventDay(String eventDay) {
+        this.eventDay = eventDay;
     }
 
     public String getDescription() {
