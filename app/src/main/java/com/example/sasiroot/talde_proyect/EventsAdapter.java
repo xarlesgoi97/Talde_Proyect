@@ -45,8 +45,8 @@ public class EventsAdapter extends ArrayAdapter<Event> {
         // Setup.
 
         name.setText(event.getTitle());
-        //title.setText(event.getLugar());
-        //company.setText(event.getFecha());
+        title.setText(event.getCity());
+        company.setText(event.getEventDay());
 
         //avatar.setImageResource(event.getImagen());
         //avatar.setImageBitmap(event.getBitmap());

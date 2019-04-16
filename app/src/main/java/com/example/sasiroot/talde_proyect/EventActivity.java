@@ -6,8 +6,10 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Point;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.util.Log;
 import android.view.Display;
 import android.view.View;
 import android.support.design.widget.NavigationView;
@@ -25,11 +27,22 @@ import android.widget.Button;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 import com.hudomju.swipe.SwipeToDismissTouchListener;
 import com.hudomju.swipe.adapter.ListViewAdapter;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 import static android.widget.Toast.LENGTH_SHORT;
 
@@ -41,13 +54,21 @@ public class EventActivity extends AppCompatActivity
     protected ArrayAdapter eventAdapter;
     protected Button star;
 
+    //TAG
+    private static final String TAG = "EventActivity";
+
+    //FIREBASE
+    private FirebaseFirestore db;
+    protected DocumentReference docRef;
+    protected CollectionReference eventsData;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_event);
         this.setTitle(R.string.app_name);
         this.star = this.findViewById(R.id.star);
-
+        getAllDocs();
         Point screen;
         screen = new Point();
         Display display = this.getWindowManager().getDefaultDisplay();
@@ -55,6 +76,7 @@ public class EventActivity extends AppCompatActivity
 
         BitmapFactory.Options opts = new BitmapFactory.Options();
         Bitmap b = BitmapFactory.decodeResource(this.getResources(), R.mipmap.ic_lekeitio1, opts);
+
 
 
         int tWidth  = b.getWidth();
@@ -66,17 +88,6 @@ public class EventActivity extends AppCompatActivity
         Bitmap bitmap = Bitmap.createScaledBitmap(b, screen.x, sHeight,false );
 
         this.events = new ArrayList<>();
-
-        this.events.add(new Event("Lekeitioko Jaiak", "Lekeitio", "19/09/07","Eskolapian","22:15","02:00","Lekeitioko jaiak onenak dira", new Date()));
-
-
-
-
-
-
-
-
-
         this.eventAdapter = new EventsAdapter(this,events);
 
         this.eventlist = this.findViewById(R.id.eventList);
@@ -120,6 +131,7 @@ public class EventActivity extends AppCompatActivity
                     Toast.makeText(EventActivity.this, "Position " + position, LENGTH_SHORT).show();
                     info(position);
                 }
+
             }
 
 
@@ -194,8 +206,9 @@ public class EventActivity extends AppCompatActivity
 
         } else if (id == R.id.nav_slideshow) {
 
-        } else if (id == R.id.nav_manage) {
-
+        } else if (id == R.id.nav_logout) {
+            FirebaseAuth.getInstance().signOut();
+            prueba();
         } else if (id == R.id.nav_share) {
 
         } else if (id == R.id.nav_send) {
@@ -233,6 +246,53 @@ public class EventActivity extends AppCompatActivity
         this.startActivityForResult(i,RESULT_OK);
     }
 
+    private void prueba() {
+        Intent i = new Intent(this,Prueba.class);
 
+        startActivity(i);
+    }
+    public void getAllDocs() {
+        // [START get_multiple_all]
+        db = FirebaseFirestore.getInstance();
+        db.collection("events").get()
+                .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                    @Override
+                    public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+
+
+
+                        if(!queryDocumentSnapshots.isEmpty()){
+
+                            List<DocumentSnapshot> list = queryDocumentSnapshots.getDocuments();
+
+                            for(DocumentSnapshot d : list){
+
+                                Event e = d.toObject(Event.class);
+                                events.add(e);
+
+
+                            }
+                            eventAdapter.notifyDataSetChanged();
+
+                        }
+
+
+                    }
+                });
+        // [END get_multiple_all]
+    }
+
+    public void customObjects() {
+        db = FirebaseFirestore.getInstance();
+        // [START custom_objects]
+        DocumentReference docRef = db.collection("events").document("city");
+        docRef.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+            @Override
+            public void onSuccess(DocumentSnapshot documentSnapshot) {
+                Event event = documentSnapshot.toObject(Event.class);
+            }
+        });
+        // [END custom_objects]
+    }
 
 }

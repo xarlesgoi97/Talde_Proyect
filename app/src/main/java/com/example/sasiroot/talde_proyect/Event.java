@@ -18,7 +18,9 @@ public class Event implements Serializable {
     public Uri photo;
     public Date createDate;
 
+    public Event() {
 
+    }
 
     public Event(/*Long idEvent,*/ String title, String city, String eventDay, String where, String eventStart, String eventEnd, String description/*, Uri photo*/, Date createDate) {
 //        this.idEvent = idEvent;
