@@ -15,14 +15,14 @@ public class Event implements Serializable {
     public String description;
     public String eventStart;
     public String eventEnd;
-    public Uri photo;
+    public String photoInfo;
     public Date createDate;
 
     public Event() {
 
     }
 
-    public Event(/*Long idEvent,*/ String title, String city, String eventDay, String where, String eventStart, String eventEnd, String description/*, Uri photo*/, Date createDate) {
+    public Event(String title, String city, String eventDay, String where, String eventStart, String eventEnd, String description, String photoInfo, Date createDate) {
 //        this.idEvent = idEvent;
         this.title = title;
         this.city = city;
@@ -31,7 +31,7 @@ public class Event implements Serializable {
         this.description = description;
         this.eventStart = eventStart;
         this.eventEnd = eventEnd;
-
+        this.photoInfo = photoInfo;
 //        this.photo = photo;
         this.createDate = createDate;
     }
@@ -86,12 +86,12 @@ public class Event implements Serializable {
         this.eventEnd = eventEnd;
     }
 
-    public Uri getPhoto() {
-        return photo;
+    public String getPhotoInfo() {
+        return photoInfo;
     }
 
-    public void setPhoto(Uri photo) {
-        this.photo = photo;
+    public void setPhotoInfo(String photoInfo) {
+        this.photoInfo = photoInfo;
     }
 
     public Date getCreateDate() {
@@ -132,7 +132,7 @@ public class Event implements Serializable {
                 ", description='" + description + '\'' +
                 ", eventStart='" + eventStart + '\'' +
                 ", eventEnd='" + eventEnd + '\'' +
-                ", photo=" + photo +
+                ", photoInfo=" + photoInfo +
                 ", createDate=" + createDate +
                 '}';
     }

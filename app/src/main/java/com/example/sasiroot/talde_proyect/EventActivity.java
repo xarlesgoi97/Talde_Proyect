@@ -208,7 +208,7 @@ public class EventActivity extends AppCompatActivity
 
         } else if (id == R.id.nav_logout) {
             FirebaseAuth.getInstance().signOut();
-            prueba();
+            logout();
         } else if (id == R.id.nav_share) {
 
         } else if (id == R.id.nav_send) {
@@ -246,7 +246,7 @@ public class EventActivity extends AppCompatActivity
         this.startActivityForResult(i,RESULT_OK);
     }
 
-    private void prueba() {
+    private void logout() {
         Intent i = new Intent(this,Prueba.class);
 
         startActivity(i);
@@ -282,17 +282,6 @@ public class EventActivity extends AppCompatActivity
         // [END get_multiple_all]
     }
 
-    public void customObjects() {
-        db = FirebaseFirestore.getInstance();
-        // [START custom_objects]
-        DocumentReference docRef = db.collection("events").document("city");
-        docRef.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
-            @Override
-            public void onSuccess(DocumentSnapshot documentSnapshot) {
-                Event event = documentSnapshot.toObject(Event.class);
-            }
-        });
-        // [END custom_objects]
-    }
+
 
 }
