@@ -31,6 +31,7 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
@@ -61,6 +62,7 @@ public class EventActivity extends AppCompatActivity
     private FirebaseFirestore db;
     protected DocumentReference docRef;
     protected CollectionReference eventsData;
+    private FirebaseUser user;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -155,8 +157,14 @@ public class EventActivity extends AppCompatActivity
     }
 
     private void addEvent() {
-        Intent i = new Intent(this, AddEventActivity.class);
-        this.startActivity(i);
+        Intent intent  = getIntent();
+        user = (FirebaseUser) intent.getExtras().get("user");
+
+        Intent i = new Intent(this,AddEventActivity.class);
+        i.putExtra("user", user);
+        //i.putExtra("user_photo", mAuth.getCurrentUser().getPhotoUrl().toString());
+
+        startActivityForResult(i,RESULT_OK);
     }
 
 

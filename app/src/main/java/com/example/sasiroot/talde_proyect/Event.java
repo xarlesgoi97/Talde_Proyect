@@ -17,13 +17,14 @@ public class Event implements Serializable {
     public String eventEnd;
     public String photoInfo;
     public Date createDate;
+    public String createBy;
 
     public Event() {
 
     }
 
-    public Event(String title, String city, String eventDay, String where, String eventStart, String eventEnd, String description, String photoInfo, Date createDate) {
-//        this.idEvent = idEvent;
+    public Event(String title, String city, String eventDay, String where, String eventStart, String eventEnd, String description, String photoInfo, Date createDate, String createBy) {
+
         this.title = title;
         this.city = city;
         this.eventDay = eventDay;
@@ -32,8 +33,8 @@ public class Event implements Serializable {
         this.eventStart = eventStart;
         this.eventEnd = eventEnd;
         this.photoInfo = photoInfo;
-//        this.photo = photo;
         this.createDate = createDate;
+        this.createBy = createBy;
     }
 
 
@@ -120,6 +121,13 @@ public class Event implements Serializable {
         this.where = where;
     }
 
+    public String getCreateBy() {
+        return createBy;
+    }
+
+    public void setCreateBy(String createBy) {
+        this.createBy = createBy;
+    }
 
     @Override
     public String toString() {
@@ -134,6 +142,7 @@ public class Event implements Serializable {
                 ", eventEnd='" + eventEnd + '\'' +
                 ", photoInfo=" + photoInfo +
                 ", createDate=" + createDate +
+                ", createBy=" + createBy +
                 '}';
     }
 }

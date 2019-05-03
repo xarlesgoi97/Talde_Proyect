@@ -17,7 +17,9 @@ import android.widget.TextView;
 
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
@@ -83,13 +85,15 @@ public class AddEventActivity extends AppCompatActivity {
     private TextView txtUserName;
 
     private ImageView imgUserPhoto;
-
+    private FirebaseUser user;
+    private  String userEmail;
 
     //FIREBASE DATANASE CLOUDFIRE
     private FirebaseFirestore db;
 
     //FIREBASE STORAGE
     private StorageReference mStorage;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -134,13 +138,17 @@ public class AddEventActivity extends AppCompatActivity {
         btnSend.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                writeEvent(txtTitle.getText().toString(),txtCity.getText().toString(),txtEventDay.getText().toString(),txtWhere.getText().toString(),txtEventStart.getText().toString(),txtEventEnd.getText().toString(),txtDescription.getText().toString(),getFileName(photo), new Date());
+                writeEvent(txtTitle.getText().toString(),txtCity.getText().toString(),txtEventDay.getText().toString(),txtWhere.getText().toString(),txtEventStart.getText().toString(),txtEventEnd.getText().toString(),txtDescription.getText().toString(),getFileName(photo), new Date(), userEmail);
                 back();
             }
         });
 
 
-        Intent intent = getIntent();
+        Intent intent  = getIntent();
+        user = (FirebaseUser) intent.getExtras().get("user");
+        userEmail = user.getEmail();
+
+
     }
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -151,18 +159,16 @@ public class AddEventActivity extends AppCompatActivity {
 
     private void logout() {
         Intent i = new Intent(this,Prueba.class);
-
         startActivity(i);
     }
     private void back() {
         Intent i = new Intent(this,EventActivity.class);
-
         startActivity(i);
     }
 
 
-    private void writeEvent(String title, String city, String eventDay, String where,  String eventStart, String eventEnd, String description, String photoInfo, Date createDate) {
-        Event event = new Event(title, city, eventDay, where, eventStart, eventEnd, description, photoInfo, createDate);
+    private void writeEvent(String title, String city, String eventDay, String where,  String eventStart, String eventEnd, String description, String photoInfo, Date createDate, String createBy) {
+        Event event = new Event(title, city, eventDay, where, eventStart, eventEnd, description, photoInfo, createDate, createBy);
         Map<String, Object> eventData = new HashMap<>();
         eventData.put("title", event.getTitle());
         eventData.put("city", event.getCity());
@@ -173,7 +179,9 @@ public class AddEventActivity extends AppCompatActivity {
         eventData.put("description", event.getDescription());
         eventData.put("photoInfo", event.getPhotoInfo());
         eventData.put("createDate", event.getCreateDate());
-        StorageReference filePath = mStorage.child("xar" + getFileName(photo));
+        eventData.put("createBy", event.getCreateBy());
+
+        StorageReference filePath = mStorage.child(user.getEmail()+"/" + getFileName(photo));
         filePath.putFile(photo);
 
 
@@ -194,6 +202,7 @@ public class AddEventActivity extends AppCompatActivity {
                 });
 
     }
+
 
 
 
@@ -300,8 +309,8 @@ public class AddEventActivity extends AppCompatActivity {
     }
 
     private void tomarFotografia() {
-       Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-       startActivityForResult(intent,COD_FOTO);
+        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        startActivityForResult(intent,COD_FOTO);
     }
 
     @Override
@@ -317,8 +326,8 @@ public class AddEventActivity extends AppCompatActivity {
                     break;
 
                 case COD_FOTO:
-                   Bitmap bitmap = (Bitmap) data.getExtras().get("data");
-                  photo= getImageUri(this.getApplicationContext(),bitmap);
+                    Bitmap bitmap = (Bitmap) data.getExtras().get("data");
+                    photo= getImageUri(this.getApplicationContext(),bitmap);
 
                     imgUserPhoto.setImageURI(photo);
                     break;
@@ -353,5 +362,6 @@ public class AddEventActivity extends AppCompatActivity {
         }
         return result;
     }
+
 
 }
