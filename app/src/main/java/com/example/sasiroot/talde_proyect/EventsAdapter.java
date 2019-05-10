@@ -2,12 +2,18 @@ package com.example.sasiroot.talde_proyect;
 
 import android.content.Context;
 import android.content.Intent;
+import android.net.Uri;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.squareup.picasso.Picasso;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -33,7 +39,7 @@ public class EventsAdapter extends ArrayAdapter<Event> {
         }
 
         // Referencias UI.
-        ImageView avatar = (ImageView) convertView.findViewById(R.id.iv_avatar);
+        final ImageView avatar = (ImageView) convertView.findViewById(R.id.iv_avatar);
         TextView name = (TextView) convertView.findViewById(R.id.nombre);
         TextView title = (TextView) convertView.findViewById(R.id.lugar);
         TextView company = (TextView) convertView.findViewById(R.id.fecha);
@@ -47,6 +53,17 @@ public class EventsAdapter extends ArrayAdapter<Event> {
         name.setText(event.getTitle());
         title.setText(event.getCity());
         company.setText(event.getEventDay());
+
+
+            FirebaseStorage storage = FirebaseStorage.getInstance();
+            StorageReference ref = storage.getReference(event.getPhotoInfo());
+            ref.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                @Override
+                public void onSuccess(Uri uri) {
+                    Picasso.get().load(uri).into(avatar);
+                }
+            });
+
 
         //avatar.setImageResource(event.getImagen());
         //avatar.setImageBitmap(event.getBitmap());

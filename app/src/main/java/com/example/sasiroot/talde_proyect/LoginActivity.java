@@ -1,117 +1,134 @@
 package com.example.sasiroot.talde_proyect;
 
-import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
-import android.content.res.Configuration;
-import android.content.res.Resources;
-import android.database.sqlite.SQLiteDatabase;
+import android.support.v4.view.GravityCompat;
+import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
-import android.widget.EditText;
-import android.widget.RadioButton;
-import android.widget.Toast;
+import android.widget.TextView;
 
-import java.util.Date;
-import java.util.Locale;
+import com.firebase.ui.auth.AuthUI;
+import com.firebase.ui.auth.IdpResponse;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+
+import java.util.Arrays;
+import java.util.List;
 
 public class LoginActivity extends AppCompatActivity {
-    private final static int REQUEST_SETTINGS = 0;
-    private final static int REQUEST_THEMES = 1;
-    private final static int REQUEST_LANGUAGES = 2;
-    private EditText password;
-    private EditText username;
-    private Button join;
-    private Button create_acc;
-    private Button skip;
+    //FIREBASE
+    public static final int RC_SIGN_IN = 100;
+    private FirebaseAuth mAuth;
 
 
+    //botones
+    private Button btnSignIn;
+    private Button btnSignOut;
 
+    private TextView textStatus;
+    private TextView textDetail;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_login);
-        this.setTitle(R.string.app_name);
+        setContentView(R.layout.activity_prueba);
 
 
-        this.password = this.findViewById(R.id.password);
-        this.username = this.findViewById(R.id.username);
-        this.join = this.findViewById(R.id.join);
-        this.create_acc = this.findViewById(R.id.create_acc);
-        this.skip = this.findViewById(R.id.skip);
-    }
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        super.onCreateOptionsMenu(menu);
-        this.getMenuInflater().inflate(R.menu.settings_menu, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-
-        int id = item.getItemId();
-
-        switch (id) {
-
-            case R.id.settingsMenuOption:
-                Intent i = new Intent(this, SettingsActivity.class);
-
-                this.startActivityForResult(i, LoginActivity.REQUEST_LANGUAGES);
-                break;
 
 
-            default:
-                super.onOptionsItemSelected(item);
-        }
-        return true;
+    //instanciar objetos
+        this.btnSignIn = this.findViewById(R.id.btnSignIn);
+        this.btnSignOut = this.findViewById(R.id.btnSignOut);
+        this.textStatus = this.findViewById(R.id.textStatus);
+        this.textDetail = this.findViewById(R.id.textDetail);
+        this.mAuth = FirebaseAuth.getInstance();
+
+    //autentificadores Google, facebook
+        final List<AuthUI.IdpConfig> providers = Arrays.asList(
+                new AuthUI.IdpConfig.GoogleBuilder().build(),
+                new AuthUI.IdpConfig.FacebookBuilder().build());
+    //Funciones de botones
+
+        //sign up
+        this.btnSignIn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                // Create and launch sign-in intent
+
+                startActivityForResult(
+                        AuthUI.getInstance()
+                                .createSignInIntentBuilder()
+                                .setAvailableProviders(providers)
+                                .build(),
+                        RC_SIGN_IN);
+                updateUI(mAuth.getCurrentUser());
+
+
+            }
+
+
+        });
+        this.btnSignOut.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                // Create and launch sign-in intent
+                FirebaseAuth.getInstance().signOut();
+                updateUI(mAuth.getCurrentUser());
+            }
+        });
+
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
 
-        if (resultCode == Activity.RESULT_CANCELED) return;
+        if (requestCode == RC_SIGN_IN) {
+            IdpResponse response = IdpResponse.fromResultIntent(data);
 
-        switch (requestCode) {
-
-            case LoginActivity.REQUEST_LANGUAGES:
-                Bundle extras = data.getExtras();
-
-                Resources res = this.getResources();
-                Configuration config = res.getConfiguration();
-                //String lang = extras.get("LANG").toString();
-                config.setLocale(new Locale(extras.get("LANG").toString()));
-                res.updateConfiguration(config, res.getDisplayMetrics());
-
-                String theme = extras.get("theme").toString();
-                SharedPreferences prefered = this.getSharedPreferences("PREFERED", Context.MODE_PRIVATE);
-                SharedPreferences.Editor editor = prefered.edit();
-                editor.putString("THEME",theme);
-                editor.commit();
-
-                this.recreate();
-                break;
-
-
-            default:
-                super.onActivityResult(requestCode, resultCode, data);
+            if (resultCode == RESULT_OK) {
+                // Successfully signed in
+                FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+                event();
+                // ...
+            } else {
+                // Sign in failed. If response is null the user canceled the
+                // sign-in flow using the back button. Otherwise check
+                // response.getError().getErrorCode() and handle the error.
+                // ...
+            }
         }
     }
 
+    private void event() {
+        Intent i = new Intent(this,EventActivity.class);
+        i.putExtra("user", mAuth.getCurrentUser());
+        //i.putExtra("user_photo", mAuth.getCurrentUser().getPhotoUrl().toString());
 
-    public void join(View view) {
-        Intent i = new Intent(this, EventActivity.class);
-        this.startActivity(i);
+        startActivity(i);
     }
 
-    public void create_acc(View view) {
-        Intent i = new Intent(this, CreateaccActivity.class);
-        this.startActivity(i);
+    @Override
+    public void onStart() {
+        super.onStart();
+        // Check if user is signed in (non-null) and update UI accordingly.
+        FirebaseUser currentUser = mAuth.getCurrentUser();
+        updateUI(currentUser);
     }
+    private void updateUI(FirebaseUser user) {
+        if (user != null) {
+            event();
+        }
+    }
+
+    @Override
+    public void onBackPressed() {
+            finish();
+            moveTaskToBack(true);
+
+    }
+
+
+
 }
-

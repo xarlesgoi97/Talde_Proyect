@@ -1,16 +1,14 @@
 package com.example.sasiroot.talde_proyect;
 
-import android.arch.lifecycle.Lifecycle;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Point;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
-import android.util.Log;
 import android.view.Display;
+import android.view.KeyEvent;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -27,22 +25,18 @@ import android.widget.Button;
 import android.widget.ListView;
 import android.widget.Toast;
 
-import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.hudomju.swipe.SwipeToDismissTouchListener;
 import com.hudomju.swipe.adapter.ListViewAdapter;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 import static android.widget.Toast.LENGTH_SHORT;
@@ -70,7 +64,6 @@ public class EventActivity extends AppCompatActivity
         setContentView(R.layout.activity_event);
         this.setTitle(R.string.app_name);
         this.star = this.findViewById(R.id.star);
-        getAllDocs();
         Point screen;
         screen = new Point();
         Display display = this.getWindowManager().getDefaultDisplay();
@@ -156,15 +149,22 @@ public class EventActivity extends AppCompatActivity
 
     }
 
+
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        getAllDocs();
+
+    }
+
     private void addEvent() {
         Intent intent  = getIntent();
         user = (FirebaseUser) intent.getExtras().get("user");
 
         Intent i = new Intent(this,AddEventActivity.class);
         i.putExtra("user", user);
-        //i.putExtra("user_photo", mAuth.getCurrentUser().getPhotoUrl().toString());
-
-        startActivityForResult(i,RESULT_OK);
+        startActivity(i);
     }
 
 
@@ -175,6 +175,8 @@ public class EventActivity extends AppCompatActivity
             drawer.closeDrawer(GravityCompat.START);
         } else {
             super.onBackPressed();
+            finish();
+            moveTaskToBack(true);
         }
     }
 
@@ -216,7 +218,8 @@ public class EventActivity extends AppCompatActivity
 
         } else if (id == R.id.nav_logout) {
             FirebaseAuth.getInstance().signOut();
-            logout();
+            back();
+
         } else if (id == R.id.nav_share) {
 
         } else if (id == R.id.nav_send) {
@@ -226,13 +229,6 @@ public class EventActivity extends AppCompatActivity
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
-    }
-
-    public void compartir(View view) {
-
-        Intent i = new Intent(this, CreateaccActivity.class);
-        this.startActivity(i);
-
     }
 
     public void star(View view) {
@@ -251,16 +247,17 @@ public class EventActivity extends AppCompatActivity
         Event event = (Event) eventlist.getItemAtPosition(position);
         i.putExtra("event", event);
 
-        this.startActivityForResult(i,RESULT_OK);
+        this.startActivity(i);
     }
 
     private void logout() {
-        Intent i = new Intent(this,Prueba.class);
+        Intent i = new Intent(this, LoginActivity.class);
 
         startActivity(i);
     }
     public void getAllDocs() {
         // [START get_multiple_all]
+        eventAdapter.clear();
         db = FirebaseFirestore.getInstance();
         db.collection("events").get()
                 .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
@@ -283,11 +280,14 @@ public class EventActivity extends AppCompatActivity
                             eventAdapter.notifyDataSetChanged();
 
                         }
-
-
                     }
                 });
-        // [END get_multiple_all]
+    }
+
+    private void back() {
+
+        Intent i = new Intent(this,LoginActivity.class);
+        startActivity(i);
     }
 
 

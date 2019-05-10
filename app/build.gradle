@@ -38,6 +38,7 @@ dependencies {
     //ListViewArrastrar
     implementation 'com.hudomju:swipe-to-dismiss-undo:1.0'
 
+    implementation 'com.squareup.picasso:picasso:2.71828' //allows for hassle-free image loading in your application
     //FIREBASE STORAGE
     implementation 'com.google.firebase:firebase-storage:16.0.1'
 

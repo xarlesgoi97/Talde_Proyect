@@ -17,7 +17,6 @@ import android.widget.TextView;
 
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
@@ -38,20 +37,15 @@ import android.content.DialogInterface;
 
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.media.MediaScannerConnection;
 import android.net.Uri;
 import android.os.Build;
-import android.os.Environment;
 import android.provider.MediaStore;
 import android.provider.Settings;
 
-import android.support.v4.content.FileProvider;
 import android.support.v7.app.AlertDialog;
 
 import android.widget.Toast;
 
-import java.io.File;
 
 
 import static android.Manifest.permission.CAMERA;
@@ -72,7 +66,7 @@ public class AddEventActivity extends AppCompatActivity {
     private static final String TAG = "AddEventActivity";
 
     //BUTTONS, IMAGEVIEW, TEXTVIEW
-    private Button btnLogout;
+
     private Button btnSend;
     //EVENT DATA
     private EditText txtTitle;
@@ -104,8 +98,7 @@ public class AddEventActivity extends AppCompatActivity {
         //STORAGE
         mStorage = FirebaseStorage.getInstance().getReference();
 
-        this.btnLogout = findViewById(R.id.logout);
-        this.txtUserName = findViewById(R.id.user_name);
+
         this.imgUserPhoto = findViewById(R.id.user_photo);
         this.btnSend = findViewById(R.id.btnSend);
         this.txtTitle = findViewById(R.id.txtTitle);
@@ -119,7 +112,6 @@ public class AddEventActivity extends AppCompatActivity {
         db = FirebaseFirestore.getInstance();
 
         //FOTOS
-        imagen= (ImageView) findViewById(R.id.imagemId);
         botonCargar= (Button) findViewById(R.id.btnCargarImg);
 
         if(validaPermisos()){
@@ -128,18 +120,12 @@ public class AddEventActivity extends AppCompatActivity {
             botonCargar.setEnabled(false);
         }
 
-        btnLogout.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                FirebaseAuth.getInstance().signOut();
-                logout();
-            }
-        });
+
         btnSend.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 writeEvent(txtTitle.getText().toString(),txtCity.getText().toString(),txtEventDay.getText().toString(),txtWhere.getText().toString(),txtEventStart.getText().toString(),txtEventEnd.getText().toString(),txtDescription.getText().toString(),getFileName(photo), new Date(), userEmail);
-                back();
+                finish();
             }
         });
 
@@ -158,7 +144,7 @@ public class AddEventActivity extends AppCompatActivity {
     }
 
     private void logout() {
-        Intent i = new Intent(this,Prueba.class);
+        Intent i = new Intent(this, LoginActivity.class);
         startActivity(i);
     }
     private void back() {
@@ -177,7 +163,7 @@ public class AddEventActivity extends AppCompatActivity {
         eventData.put("eventStart", event.getEventStart());
         eventData.put("eventEnd", event.getEventEnd());
         eventData.put("description", event.getDescription());
-        eventData.put("photoInfo", event.getPhotoInfo());
+        eventData.put("photoInfo", user.getEmail()+ "/" +event.getPhotoInfo());
         eventData.put("createDate", event.getCreateDate());
         eventData.put("createBy", event.getCreateBy());
 

@@ -15,9 +15,6 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme.NoActionBar">
         <activity android:name=".MainActivity" />
-        <activity android:name=".LoginActivity">
-
-        </activity>
         <activity android:name=".SettingsActivity" />
         <activity android:name=".AddEventActivity">
 
@@ -26,8 +23,7 @@
         </activity>
         <activity android:name=".EventActivity"/>
         <activity android:name=".InfoActivity"/>
-        <activity android:name=".CreateaccActivity" />
-        <activity android:name=".Prueba">
+        <activity android:name=".LoginActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
