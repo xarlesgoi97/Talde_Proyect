@@ -1,12 +1,16 @@
 package com.example.sasiroot.talde_proyect;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Point;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.v7.app.AlertDialog;
+import android.util.Log;
 import android.view.Display;
 import android.view.KeyEvent;
 import android.view.View;
@@ -25,6 +29,7 @@ import android.widget.Button;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -48,6 +53,7 @@ public class EventActivity extends AppCompatActivity
     protected ArrayList<Event> events;
     protected ArrayAdapter eventAdapter;
     protected Button star;
+    private Integer position;
 
     //TAG
     private static final String TAG = "EventActivity";
@@ -131,6 +137,48 @@ public class EventActivity extends AppCompatActivity
 
 
         });
+        eventlist.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+            @Override
+            public boolean onItemLongClick(AdapterView<?> adapterView, View view, int i, long l) {
+                position = i;
+                final CharSequence[] opciones={"Aceptar","Cancelar"};
+                final AlertDialog.Builder alertOpciones=new AlertDialog.Builder(EventActivity.this);
+                alertOpciones.setTitle("Estas seguro de eliminar este evento?");
+                alertOpciones.setItems(opciones, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        Event  event= new Event();
+                        if (opciones[i].equals("Aceptar")){
+                            db.collection("events").document(event.getIdEvent())
+                                    .delete()
+                                    .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                        @Override
+                                        public void onSuccess(Void aVoid) {
+                                            Log.d(TAG, "DocumentSnapshot successfully deleted!");
+                                        }
+                                    })
+                                    .addOnFailureListener(new OnFailureListener() {
+                                        @Override
+                                        public void onFailure(@NonNull Exception e) {
+                                            Log.w(TAG, "Error deleting document", e);
+                                        }
+                                    });
+                        }else{
+                            dialogInterface.dismiss();
+                        }
+                    }
+                });
+                alertOpciones.show();
+                return true;
+            }
+
+
+
+
+
+
+
+        });
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         //setSupportActionBar(toolbar);
@@ -148,6 +196,7 @@ public class EventActivity extends AppCompatActivity
 
 
     }
+
 
 
 
@@ -245,8 +294,8 @@ public class EventActivity extends AppCompatActivity
     private void info(Integer position) {
         Intent i = new Intent(this, InfoActivity.class);
         Event event = (Event) eventlist.getItemAtPosition(position);
-        i.putExtra("event", event);
 
+        i.putExtra("event", event);
         this.startActivity(i);
     }
 

@@ -15,8 +15,10 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
@@ -28,9 +30,7 @@ import java.io.ByteArrayOutputStream;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
-
-
-
+import java.util.UUID;
 
 
 import android.content.DialogInterface;
@@ -124,7 +124,8 @@ public class AddEventActivity extends AppCompatActivity {
         btnSend.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                writeEvent(txtTitle.getText().toString(),txtCity.getText().toString(),txtEventDay.getText().toString(),txtWhere.getText().toString(),txtEventStart.getText().toString(),txtEventEnd.getText().toString(),txtDescription.getText().toString(),getFileName(photo), new Date(), userEmail);
+                String eventId = UUID.randomUUID().toString();
+                writeEvent(eventId, txtTitle.getText().toString(),txtCity.getText().toString(),txtEventDay.getText().toString(),txtWhere.getText().toString(),txtEventStart.getText().toString(),txtEventEnd.getText().toString(),txtDescription.getText().toString(),getFileName(photo), new Date(), userEmail);
                 finish();
             }
         });
@@ -153,9 +154,10 @@ public class AddEventActivity extends AppCompatActivity {
     }
 
 
-    private void writeEvent(String title, String city, String eventDay, String where,  String eventStart, String eventEnd, String description, String photoInfo, Date createDate, String createBy) {
-        Event event = new Event(title, city, eventDay, where, eventStart, eventEnd, description, photoInfo, createDate, createBy);
+    private void writeEvent(String eventId, String title, String city, String eventDay, String where,  String eventStart, String eventEnd, String description, String photoInfo, Date createDate, String createBy) {
+        final Event event = new Event(eventId, title, city, eventDay, where, eventStart, eventEnd, description, photoInfo, createDate, createBy);
         Map<String, Object> eventData = new HashMap<>();
+        eventData.put("eventId", event.getIdEvent());
         eventData.put("title", event.getTitle());
         eventData.put("city", event.getCity());
         eventData.put("eventDay", event.getEventDay());
@@ -171,13 +173,15 @@ public class AddEventActivity extends AppCompatActivity {
         filePath.putFile(photo);
 
 
-        db.collection("events")
-                .add(eventData)
-                .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+
+        db.collection("events").document(event.getIdEvent())
+                .set(eventData)
+                .addOnCompleteListener(new OnCompleteListener<Void>() {
                     @Override
-                    public void onSuccess(DocumentReference documentReference) {
-                        Log.d(TAG, "DocumentSnapshot added with ID: " + documentReference.getId());
+                    public void onComplete(@NonNull Task<Void> task) {
+                        Log.d(TAG, "DocumentSnapshot added with ID: " + event.getIdEvent());
                     }
+
                 })
                 .addOnFailureListener(new OnFailureListener() {
 

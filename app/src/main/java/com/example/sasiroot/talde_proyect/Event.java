@@ -7,7 +7,7 @@ import java.util.Date;
 
 public class Event implements Serializable {
 
-    public Long idEvent;
+    public String idEvent;
     public String title;
     public String city;
     public String eventDay;
@@ -23,8 +23,8 @@ public class Event implements Serializable {
 
     }
 
-    public Event(String title, String city, String eventDay, String where, String eventStart, String eventEnd, String description, String photoInfo, Date createDate, String createBy) {
-
+    public Event(String idEvent, String title, String city, String eventDay, String where, String eventStart, String eventEnd, String description, String photoInfo, Date createDate, String createBy) {
+        this.idEvent = idEvent;
         this.title = title;
         this.city = city;
         this.eventDay = eventDay;
@@ -39,11 +39,11 @@ public class Event implements Serializable {
 
 
 
-    public Long getIdEvent() {
+    public String getIdEvent() {
         return idEvent;
     }
 
-    public void setIdEvent(Long idEvent) {
+    public void setIdEvent(String idEvent) {
         this.idEvent = idEvent;
     }
 
