@@ -1,5 +1,6 @@
 package com.example.sasiroot.talde_proyect;
 
+import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -27,6 +28,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnFailureListener;
@@ -54,6 +56,7 @@ public class EventActivity extends AppCompatActivity
     protected ArrayAdapter eventAdapter;
     protected Button star;
     private Integer position;
+    private ProgressDialog pb;
 
     //TAG
     private static final String TAG = "EventActivity";
@@ -77,6 +80,7 @@ public class EventActivity extends AppCompatActivity
 
         BitmapFactory.Options opts = new BitmapFactory.Options();
         Bitmap b = BitmapFactory.decodeResource(this.getResources(), R.mipmap.ic_lekeitio1, opts);
+        pb = new ProgressDialog(this);
 
 
 
@@ -102,59 +106,40 @@ public class EventActivity extends AppCompatActivity
             }
         });
 
-
-        final SwipeToDismissTouchListener<ListViewAdapter> touchListener =
-                new SwipeToDismissTouchListener<>(
-                        new ListViewAdapter(eventlist),
-                        new SwipeToDismissTouchListener.DismissCallbacks<ListViewAdapter>() {
-                            @Override
-                            public boolean canDismiss(int position) {
-                                return true;
-                            }
-
-                            @Override
-                            public void onDismiss(ListViewAdapter view, int position) {
-                                events.remove(position);
-                            }
-                        });
-
-        eventlist.setOnTouchListener(touchListener);
-        eventlist.setOnScrollListener((AbsListView.OnScrollListener) touchListener.makeScrollListener());
         eventlist.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-
-
-
-                if (touchListener.existPendingDismisses()) {
-                    touchListener.undoPendingDismiss();
-                } else {
-                    Toast.makeText(EventActivity.this, "Position " + position, LENGTH_SHORT).show();
-                    info(position);
-                }
-
+                info(position);
             }
 
 
         });
         eventlist.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
             @Override
-            public boolean onItemLongClick(AdapterView<?> adapterView, View view, int i, long l) {
-                position = i;
+            public boolean onItemLongClick(AdapterView<?> adapterView, View view, final int position, long l) {
+
+                Event item = (Event) eventlist.getItemAtPosition(position);
+                final String eventID = item.geteventId();
+
+
                 final CharSequence[] opciones={"Aceptar","Cancelar"};
                 final AlertDialog.Builder alertOpciones=new AlertDialog.Builder(EventActivity.this);
                 alertOpciones.setTitle("Estas seguro de eliminar este evento?");
                 alertOpciones.setItems(opciones, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
-                        Event  event= new Event();
+
                         if (opciones[i].equals("Aceptar")){
-                            db.collection("events").document(event.getIdEvent())
+                            pb.setTitle("Borrando evento...");
+                            pb.show();
+                            db.collection("events").document(eventID)
                                     .delete()
                                     .addOnSuccessListener(new OnSuccessListener<Void>() {
                                         @Override
                                         public void onSuccess(Void aVoid) {
-                                            Log.d(TAG, "DocumentSnapshot successfully deleted!");
+                                            pb.dismiss();
+                                            eventAdapter.remove(position);
+                                            Toast.makeText(EventActivity.this,"Borrado correctamente",Toast.LENGTH_SHORT).show();
                                         }
                                     })
                                     .addOnFailureListener(new OnFailureListener() {

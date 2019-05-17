@@ -58,27 +58,20 @@ public class AddEventActivity extends AppCompatActivity {
     final int COD_SELECCIONA=10;
     final int COD_FOTO=20;
 
-    private Button botonCargar;
-    private ImageView imagen;
-    private String path;
+
 
     //TAG
     private static final String TAG = "AddEventActivity";
 
     //BUTTONS, IMAGEVIEW, TEXTVIEW
-
+    private ImageView imgUserPhoto;
     private Button btnSend;
+    private Button botonCargar;
     //EVENT DATA
-    private EditText txtTitle;
-    private EditText txtCity;
-    private EditText txtEventDay;
-    private EditText txtWhere;
-    private EditText txtEventStart;
-    private EditText txtEventEnd;
-    private EditText txtDescription;
+    private EditText txtTitle,txtCity,txtEventDay,txtWhere, txtEventStart,txtEventEnd, txtDescription;
     private TextView txtUserName;
 
-    private ImageView imgUserPhoto;
+
     private FirebaseUser user;
     private  String userEmail;
 
@@ -130,7 +123,6 @@ public class AddEventActivity extends AppCompatActivity {
             }
         });
 
-
         Intent intent  = getIntent();
         user = (FirebaseUser) intent.getExtras().get("user");
         userEmail = user.getEmail();
@@ -157,7 +149,7 @@ public class AddEventActivity extends AppCompatActivity {
     private void writeEvent(String eventId, String title, String city, String eventDay, String where,  String eventStart, String eventEnd, String description, String photoInfo, Date createDate, String createBy) {
         final Event event = new Event(eventId, title, city, eventDay, where, eventStart, eventEnd, description, photoInfo, createDate, createBy);
         Map<String, Object> eventData = new HashMap<>();
-        eventData.put("eventId", event.getIdEvent());
+        eventData.put("eventId", event.geteventId());
         eventData.put("title", event.getTitle());
         eventData.put("city", event.getCity());
         eventData.put("eventDay", event.getEventDay());
@@ -174,12 +166,12 @@ public class AddEventActivity extends AppCompatActivity {
 
 
 
-        db.collection("events").document(event.getIdEvent())
+        db.collection("events").document(event.geteventId())
                 .set(eventData)
                 .addOnCompleteListener(new OnCompleteListener<Void>() {
                     @Override
                     public void onComplete(@NonNull Task<Void> task) {
-                        Log.d(TAG, "DocumentSnapshot added with ID: " + event.getIdEvent());
+                        Log.d(TAG, "DocumentSnapshot added with ID: " + event.geteventId());
                     }
 
                 })

@@ -7,7 +7,7 @@ import java.util.Date;
 
 public class Event implements Serializable {
 
-    public String idEvent;
+    public String eventId;
     public String title;
     public String city;
     public String eventDay;
@@ -23,8 +23,8 @@ public class Event implements Serializable {
 
     }
 
-    public Event(String idEvent, String title, String city, String eventDay, String where, String eventStart, String eventEnd, String description, String photoInfo, Date createDate, String createBy) {
-        this.idEvent = idEvent;
+    public Event(String eventId, String title, String city, String eventDay, String where, String eventStart, String eventEnd, String description, String photoInfo, Date createDate, String createBy) {
+        this.eventId = eventId;
         this.title = title;
         this.city = city;
         this.eventDay = eventDay;
@@ -39,12 +39,12 @@ public class Event implements Serializable {
 
 
 
-    public String getIdEvent() {
-        return idEvent;
+    public String geteventId() {
+        return eventId;
     }
 
-    public void setIdEvent(String idEvent) {
-        this.idEvent = idEvent;
+    public void seteventId(String eventId) {
+        this.eventId = eventId;
     }
 
     public String getCity() {
@@ -132,7 +132,7 @@ public class Event implements Serializable {
     @Override
     public String toString() {
         return "Event{" +
-                "idEvent=" + idEvent +
+                "eventId=" + eventId +
                 ", title='" + title + '\'' +
                 ", city='" + city + '\'' +
                 ", eventDay='" + eventDay + '\'' +
