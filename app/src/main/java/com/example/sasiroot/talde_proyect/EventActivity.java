@@ -27,6 +27,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnFailureListener;
@@ -51,6 +52,8 @@ public class EventActivity extends AppCompatActivity
     protected ArrayAdapter eventAdapter;
     protected Button star;
     private ProgressDialog pb;
+    private NavigationView navigationView;
+    private TextView userName, userEmail;
 
     //TAG
     private static final String TAG = "EventActivity";
@@ -99,6 +102,21 @@ public class EventActivity extends AppCompatActivity
         this.eventlist = this.findViewById(R.id.eventList);
         this.eventlist.setAdapter(eventAdapter);
 
+        this.navigationView = (NavigationView) findViewById(R.id.nav_view);
+        View header=navigationView.getHeaderView(0);
+        this.userName = header.findViewById(R.id.userName);
+        this.userEmail = header.findViewById(R.id.userEmail);
+
+        Intent intent = getIntent();
+        user = (FirebaseUser) intent.getExtras().get("user");
+
+        String userEmail = user.getEmail();
+        String userName = user.getDisplayName();
+
+        this.userName.setText(userName);
+        this.userEmail.setText(userEmail);
+
+
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -106,6 +124,13 @@ public class EventActivity extends AppCompatActivity
                 addEvent();
             }
         });
+
+        if (userEmail.compareTo("gotzongalletebeitia95@gmail.com")==0){
+            fab.setVisibility(View.VISIBLE);
+
+        }else{
+            fab.setVisibility(View.INVISIBLE);
+        }
 
         eventlist.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -115,55 +140,51 @@ public class EventActivity extends AppCompatActivity
 
 
         });
-        eventlist.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
-            @Override
-            public boolean onItemLongClick(AdapterView<?> adapterView, View view, final int position, long l) {
+        if (userEmail.compareTo("gotzongalletebeitia95@gmail.com")==0) {
+            eventlist.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+                @Override
+                public boolean onItemLongClick(AdapterView<?> adapterView, View view, final int position, long l) {
 
-                final Event item = (Event) eventlist.getItemAtPosition(position);
+                    final Event item = (Event) eventlist.getItemAtPosition(position);
 
-                final CharSequence[] opciones={"Aceptar","Cancelar"};
-                final AlertDialog.Builder alertOpciones=new AlertDialog.Builder(EventActivity.this);
+                    final CharSequence[] opciones = {"Aceptar", "Cancelar"};
+                    final AlertDialog.Builder alertOpciones = new AlertDialog.Builder(EventActivity.this);
 
-                alertOpciones.setTitle("Estas seguro de eliminar este evento?");
-                alertOpciones.setItems(opciones, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
+                    alertOpciones.setTitle("Estas seguro de eliminar este evento?");
+                    alertOpciones.setItems(opciones, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
 
-                        if (opciones[i].equals("Aceptar")){
-                            pb.setTitle("Borrando evento...");
-                            pb.show();
-                            db.collection("events").document(item.geteventId())
-                                    .delete()
-                                    .addOnSuccessListener(new OnSuccessListener<Void>() {
-                                        @Override
-                                        public void onSuccess(Void aVoid) {
-                                            pb.dismiss();
-                                            eventAdapter.remove(item);
-                                            Toast.makeText(EventActivity.this,"Borrado correctamente",Toast.LENGTH_SHORT).show();
-                                        }
-                                    })
-                                    .addOnFailureListener(new OnFailureListener() {
-                                        @Override
-                                        public void onFailure(@NonNull Exception e) {
-                                            Log.w(TAG, "Error deleting document", e);
-                                        }
-                                    });
-                        }else{
-                            dialogInterface.dismiss();
+                            if (opciones[i].equals("Aceptar")) {
+                                pb.setTitle("Borrando evento...");
+                                pb.show();
+                                db.collection("events").document(item.geteventId())
+                                        .delete()
+                                        .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                            @Override
+                                            public void onSuccess(Void aVoid) {
+                                                pb.dismiss();
+                                                eventAdapter.remove(item);
+                                                Toast.makeText(EventActivity.this, "Borrado correctamente", Toast.LENGTH_SHORT).show();
+                                            }
+                                        })
+                                        .addOnFailureListener(new OnFailureListener() {
+                                            @Override
+                                            public void onFailure(@NonNull Exception e) {
+                                                Log.w(TAG, "Error deleting document", e);
+                                            }
+                                        });
+                            } else {
+                                dialogInterface.dismiss();
+                            }
                         }
-                    }
-                });
-                alertOpciones.show();
-                return true;
-            }
+                    });
+                    alertOpciones.show();
+                    return true;
+                }
 
-
-
-
-
-
-
-        });
+            });
+        }
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         //setSupportActionBar(toolbar);
@@ -176,8 +197,8 @@ public class EventActivity extends AppCompatActivity
         drawer.addDrawerListener(toggle);
         toggle.syncState();
 
-        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
-        navigationView.setNavigationItemSelectedListener(this);
+
+        this.navigationView.setNavigationItemSelectedListener(this);
 
 
     }
