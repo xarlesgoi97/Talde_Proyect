@@ -23,13 +23,7 @@ public class InfoActivity extends AppCompatActivity {
 
 
     private ImageView background;
-    private TextView titulo;
-    private TextView lugar;
-    private TextView fecha;
-    private TextView descripcion;
-    private TextView ciudad;
-    private TextView start;
-    private TextView end;
+    private TextView titulo, lugar, fecha, descripcion, ciudad, start, end;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,7 +44,6 @@ public class InfoActivity extends AppCompatActivity {
         Intent intent  = getIntent();
         Event eventItem = (Event) intent.getExtras().get("event");
 
-        //background.setBackgroundResource(eventItem.getImagen());
         titulo.setText(eventItem.getTitle());
         lugar.setText(eventItem.getWhere());
         fecha.setText(eventItem.getEventDay());

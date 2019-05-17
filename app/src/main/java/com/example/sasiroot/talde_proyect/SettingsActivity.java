@@ -13,8 +13,7 @@ import java.util.Locale;
 
 public class SettingsActivity extends AppCompatActivity {
 
-    private Spinner selector;
-    private Spinner select;
+    private Spinner selector,select;
     private String[] locales;
 
     @Override

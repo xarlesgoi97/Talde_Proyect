@@ -22,13 +22,9 @@ public class LoginActivity extends AppCompatActivity {
     public static final int RC_SIGN_IN = 100;
     private FirebaseAuth mAuth;
 
-
     //botones
     private Button btnSignIn;
-    private Button btnSignOut;
 
-    private TextView textStatus;
-    private TextView textDetail;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -39,9 +35,6 @@ public class LoginActivity extends AppCompatActivity {
 
     //instanciar objetos
         this.btnSignIn = this.findViewById(R.id.btnSignIn);
-        this.btnSignOut = this.findViewById(R.id.btnSignOut);
-        this.textStatus = this.findViewById(R.id.textStatus);
-        this.textDetail = this.findViewById(R.id.textDetail);
         this.mAuth = FirebaseAuth.getInstance();
 
     //autentificadores Google, facebook
@@ -68,14 +61,6 @@ public class LoginActivity extends AppCompatActivity {
             }
 
 
-        });
-        this.btnSignOut.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                // Create and launch sign-in intent
-                FirebaseAuth.getInstance().signOut();
-                updateUI(mAuth.getCurrentUser());
-            }
         });
 
     }

@@ -8,15 +8,22 @@
     tools:context=".EventActivity"
     tools:showIn="@layout/app_bar_event">
 
+    <android.support.v4.widget.SwipeRefreshLayout
+        android:id="@+id/swipeRefresh"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
 
-    <ListView
-        android:id="@+id/eventList"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:background="@color/colorWhite"
-        android:padding="10dp"
-        android:dividerHeight="10dp"
-        />
+        <ListView
+            android:id="@+id/eventList"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@color/colorWhite"
+            android:padding="10dp"
+            android:dividerHeight="10dp"
+            />
+
+    </android.support.v4.widget.SwipeRefreshLayout>
+
 
 
 </android.support.constraint.ConstraintLayout>

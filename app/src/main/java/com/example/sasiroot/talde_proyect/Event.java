@@ -7,17 +7,8 @@ import java.util.Date;
 
 public class Event implements Serializable {
 
-    public String eventId;
-    public String title;
-    public String city;
-    public String eventDay;
-    public String where;
-    public String description;
-    public String eventStart;
-    public String eventEnd;
-    public String photoInfo;
+    public String eventId, title, city, eventDay, where, description, eventStart, eventEnd, photoInfo, createBy;
     public Date createDate;
-    public String createBy;
 
     public Event() {
 

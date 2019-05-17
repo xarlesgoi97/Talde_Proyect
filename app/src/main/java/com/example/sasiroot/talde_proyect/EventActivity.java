@@ -10,10 +10,10 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AlertDialog;
 import android.util.Log;
 import android.view.Display;
-import android.view.KeyEvent;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -23,12 +23,10 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
-import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnFailureListener;
@@ -40,22 +38,18 @@ import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
-import com.hudomju.swipe.SwipeToDismissTouchListener;
-import com.hudomju.swipe.adapter.ListViewAdapter;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import static android.widget.Toast.LENGTH_SHORT;
-
 public class EventActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
+    private SwipeRefreshLayout swipeRefresh;
     protected ListView eventlist;
     protected ArrayList<Event> events;
     protected ArrayAdapter eventAdapter;
     protected Button star;
-    private Integer position;
     private ProgressDialog pb;
 
     //TAG
@@ -91,7 +85,14 @@ public class EventActivity extends AppCompatActivity
         int p = (sWidth * 100) / tWidth;
         int sHeight = (b.getHeight() * p)/100;
         Bitmap bitmap = Bitmap.createScaledBitmap(b, screen.x, sHeight,false );
-
+        this.swipeRefresh = this.findViewById(R.id.swipeRefresh);
+        swipeRefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                getAllDocs();
+                swipeRefresh.setRefreshing(false);
+            }
+        });
         this.events = new ArrayList<>();
         this.eventAdapter = new EventsAdapter(this,events);
 
@@ -118,12 +119,11 @@ public class EventActivity extends AppCompatActivity
             @Override
             public boolean onItemLongClick(AdapterView<?> adapterView, View view, final int position, long l) {
 
-                Event item = (Event) eventlist.getItemAtPosition(position);
-                final String eventID = item.geteventId();
-
+                final Event item = (Event) eventlist.getItemAtPosition(position);
 
                 final CharSequence[] opciones={"Aceptar","Cancelar"};
                 final AlertDialog.Builder alertOpciones=new AlertDialog.Builder(EventActivity.this);
+
                 alertOpciones.setTitle("Estas seguro de eliminar este evento?");
                 alertOpciones.setItems(opciones, new DialogInterface.OnClickListener() {
                     @Override
@@ -132,13 +132,13 @@ public class EventActivity extends AppCompatActivity
                         if (opciones[i].equals("Aceptar")){
                             pb.setTitle("Borrando evento...");
                             pb.show();
-                            db.collection("events").document(eventID)
+                            db.collection("events").document(item.geteventId())
                                     .delete()
                                     .addOnSuccessListener(new OnSuccessListener<Void>() {
                                         @Override
                                         public void onSuccess(Void aVoid) {
                                             pb.dismiss();
-                                            eventAdapter.remove(position);
+                                            eventAdapter.remove(item);
                                             Toast.makeText(EventActivity.this,"Borrado correctamente",Toast.LENGTH_SHORT).show();
                                         }
                                     })

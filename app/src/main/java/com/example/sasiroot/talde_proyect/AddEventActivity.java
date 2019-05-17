@@ -1,5 +1,6 @@
 package com.example.sasiroot.talde_proyect;
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
@@ -54,32 +55,27 @@ import static android.Manifest.permission.WRITE_EXTERNAL_STORAGE;
 
 public class AddEventActivity extends AppCompatActivity {
 
-    private Uri photo;
-    final int COD_SELECCIONA=10;
-    final int COD_FOTO=20;
-
-
-
     //TAG
+    private static final int COD_SELECCIONA=10;
+    private static final int COD_FOTO=20;
     private static final String TAG = "AddEventActivity";
 
-    //BUTTONS, IMAGEVIEW, TEXTVIEW
+    //BUTTONS, IMAGEVIEW, TEXTVIEW...
     private ImageView imgUserPhoto;
-    private Button btnSend;
-    private Button botonCargar;
+    private Button btnSend, botonCargar;
+    private Uri photo;
+    private ProgressDialog pb;
+
     //EVENT DATA
     private EditText txtTitle,txtCity,txtEventDay,txtWhere, txtEventStart,txtEventEnd, txtDescription;
     private TextView txtUserName;
-
-
-    private FirebaseUser user;
     private  String userEmail;
 
-    //FIREBASE DATANASE CLOUDFIRE
+    //FIREBASE
     private FirebaseFirestore db;
-
-    //FIREBASE STORAGE
     private StorageReference mStorage;
+    private FirebaseUser user;
+
 
 
     @Override
@@ -90,17 +86,8 @@ public class AddEventActivity extends AppCompatActivity {
 
         //STORAGE
         mStorage = FirebaseStorage.getInstance().getReference();
-
-
-        this.imgUserPhoto = findViewById(R.id.user_photo);
-        this.btnSend = findViewById(R.id.btnSend);
-        this.txtTitle = findViewById(R.id.txtTitle);
-        this.txtCity = findViewById(R.id.txtCity);
-        this.txtEventDay = findViewById(R.id.txtEventDay);
-        this.txtWhere = findViewById(R.id.txtWhere);
-        this.txtEventStart = findViewById(R.id.txtEventStart);
-        this.txtEventEnd = findViewById(R.id.txtEventEnd);
-        this.txtDescription = findViewById(R.id.txtDescription);
+        initializeIds();
+        pb = new ProgressDialog(this);
         //CLOUDFIRE DATABASE
         db = FirebaseFirestore.getInstance();
 
@@ -136,15 +123,22 @@ public class AddEventActivity extends AppCompatActivity {
         return true;
     }
 
-    private void logout() {
-        Intent i = new Intent(this, LoginActivity.class);
-        startActivity(i);
-    }
     private void back() {
         Intent i = new Intent(this,EventActivity.class);
         startActivity(i);
     }
 
+    private void initializeIds(){
+        this.imgUserPhoto = findViewById(R.id.user_photo);
+        this.btnSend = findViewById(R.id.btnSend);
+        this.txtTitle = findViewById(R.id.txtTitle);
+        this.txtCity = findViewById(R.id.txtCity);
+        this.txtEventDay = findViewById(R.id.txtEventDay);
+        this.txtWhere = findViewById(R.id.txtWhere);
+        this.txtEventStart = findViewById(R.id.txtEventStart);
+        this.txtEventEnd = findViewById(R.id.txtEventEnd);
+        this.txtDescription = findViewById(R.id.txtDescription);
+    }
 
     private void writeEvent(String eventId, String title, String city, String eventDay, String where,  String eventStart, String eventEnd, String description, String photoInfo, Date createDate, String createBy) {
         final Event event = new Event(eventId, title, city, eventDay, where, eventStart, eventEnd, description, photoInfo, createDate, createBy);
@@ -163,15 +157,22 @@ public class AddEventActivity extends AppCompatActivity {
 
         StorageReference filePath = mStorage.child(user.getEmail()+"/" + getFileName(photo));
         filePath.putFile(photo);
+        uploadData( eventData,event);
+    }
 
 
 
+
+    private void uploadData(Map<String, Object> eventData,Event event) {
+        pb.setTitle("Subiendo evento...");
+        pb.show();
         db.collection("events").document(event.geteventId())
                 .set(eventData)
                 .addOnCompleteListener(new OnCompleteListener<Void>() {
                     @Override
                     public void onComplete(@NonNull Task<Void> task) {
-                        Log.d(TAG, "DocumentSnapshot added with ID: " + event.geteventId());
+                        pb.dismiss();
+                        Toast.makeText(AddEventActivity.this,"Evento subido",Toast.LENGTH_SHORT).show();
                     }
 
                 })
@@ -179,15 +180,11 @@ public class AddEventActivity extends AppCompatActivity {
 
                     @Override
                     public void onFailure(@NonNull Exception e) {
-                        Log.w(TAG, "Error adding document", e);
+                        Toast.makeText(AddEventActivity.this,"Error al subir evento" + e,Toast.LENGTH_SHORT).show();
                     }
                 });
 
     }
-
-
-
-
     //FOTOS
     private boolean validaPermisos() {
 
