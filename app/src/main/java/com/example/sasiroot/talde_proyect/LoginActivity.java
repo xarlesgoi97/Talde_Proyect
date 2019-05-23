@@ -1,6 +1,7 @@
 package com.example.sasiroot.talde_proyect;
 
 import android.content.Intent;
+import android.support.annotation.NonNull;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
@@ -11,6 +12,8 @@ import android.widget.TextView;
 
 import com.firebase.ui.auth.AuthUI;
 import com.firebase.ui.auth.IdpResponse;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
@@ -25,6 +28,7 @@ public class LoginActivity extends AppCompatActivity {
     //botones
     private Button btnSignIn;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -35,6 +39,8 @@ public class LoginActivity extends AppCompatActivity {
 
     //instanciar objetos
         this.btnSignIn = this.findViewById(R.id.btnSignIn);
+
+
         this.mAuth = FirebaseAuth.getInstance();
 
     //autentificadores Google, facebook
@@ -43,25 +49,34 @@ public class LoginActivity extends AppCompatActivity {
                 new AuthUI.IdpConfig.FacebookBuilder().build());
     //Funciones de botones
 
+
         //sign up
         this.btnSignIn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 // Create and launch sign-in intent
-
                 startActivityForResult(
                         AuthUI.getInstance()
                                 .createSignInIntentBuilder()
                                 .setAvailableProviders(providers)
                                 .build(),
                         RC_SIGN_IN);
-                updateUI(mAuth.getCurrentUser());
+
+                AuthUI.getInstance()
+                        .signOut(LoginActivity.this)
+                        .addOnCompleteListener(new OnCompleteListener<Void>() {
+                            public void onComplete(@NonNull Task<Void> task) {
+                                // ...
+                            }
+                        });
 
 
             }
 
 
         });
+
+
 
     }
 
@@ -74,6 +89,7 @@ public class LoginActivity extends AppCompatActivity {
 
             if (resultCode == RESULT_OK) {
                 // Successfully signed in
+
                 FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
                 event();
                 // ...

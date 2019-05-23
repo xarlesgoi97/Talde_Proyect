@@ -14,6 +14,7 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AlertDialog;
 import android.util.Log;
 import android.view.Display;
+import android.view.MenuInflater;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -27,11 +28,14 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
+import android.widget.SearchView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.CollectionReference;
@@ -55,6 +59,7 @@ public class EventActivity extends AppCompatActivity
     private NavigationView navigationView;
     private TextView userName, userEmail;
 
+
     //TAG
     private static final String TAG = "EventActivity";
 
@@ -70,6 +75,10 @@ public class EventActivity extends AppCompatActivity
         setContentView(R.layout.activity_event);
         this.setTitle(R.string.app_name);
         this.star = this.findViewById(R.id.star);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+
+
         Point screen;
         screen = new Point();
         Display display = this.getWindowManager().getDefaultDisplay();
@@ -106,6 +115,7 @@ public class EventActivity extends AppCompatActivity
         View header=navigationView.getHeaderView(0);
         this.userName = header.findViewById(R.id.userName);
         this.userEmail = header.findViewById(R.id.userEmail);
+
 
         Intent intent = getIntent();
         user = (FirebaseUser) intent.getExtras().get("user");
@@ -186,8 +196,7 @@ public class EventActivity extends AppCompatActivity
             });
         }
 
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        //setSupportActionBar(toolbar);
+
 
 
 
@@ -238,10 +247,25 @@ public class EventActivity extends AppCompatActivity
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.search_menu, menu);
+        MenuItem item = menu.findItem(R.id.action_search);
+        SearchView searchView = (SearchView) item.getActionView();
 
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String s) {
+                return false;
+            }
 
+            @Override
+            public boolean onQueryTextChange(String s) {
 
-        return true;
+                return true;
+            }
+        });
+
+        return super.onCreateOptionsMenu(menu);
     }
 
     @Override
@@ -255,6 +279,7 @@ public class EventActivity extends AppCompatActivity
         if (id == R.id.action_settings) {
             return true;
         }
+
 
         return super.onOptionsItemSelected(item);
     }
@@ -329,7 +354,6 @@ public class EventActivity extends AppCompatActivity
 
                                 Event e = d.toObject(Event.class);
                                 events.add(e);
-
 
                             }
                             eventAdapter.notifyDataSetChanged();
