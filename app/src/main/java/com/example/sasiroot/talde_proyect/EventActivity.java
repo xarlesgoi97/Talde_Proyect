@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Point;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
@@ -27,6 +28,7 @@ import android.view.MenuItem;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.SearchView;
 import android.widget.TextView;
@@ -38,6 +40,8 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.auth.GoogleAuthProvider;
+import com.google.firebase.auth.UserInfo;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
@@ -45,6 +49,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -60,6 +65,7 @@ public class EventActivity extends AppCompatActivity
     private ProgressDialog pb;
     private NavigationView navigationView;
     private TextView userName, userEmail;
+    private ImageView userPhoto;
 
 
     //TAG
@@ -118,17 +124,31 @@ public class EventActivity extends AppCompatActivity
         View header=navigationView.getHeaderView(0);
         this.userName = header.findViewById(R.id.userName);
         this.userEmail = header.findViewById(R.id.userEmail);
+        this.userPhoto = header.findViewById(R.id.userPhoto);
 
 
         Intent intent = getIntent();
         user = (FirebaseUser) intent.getExtras().get("user");
-
         String userEmail = user.getEmail();
         String userName = user.getDisplayName();
+        user.getProviderId().equals(GoogleAuthProvider.PROVIDER_ID);
+        Uri userPhoto = user.getPhotoUrl();
+
+
+//
+//        for (UserInfo profile : user.getProviderData()) {
+//            if (profile.getProviderId().equals(GoogleAuthProvider.PROVIDER_ID)) {
+//                Uri photo = profile.getPhotoUrl();
+//                this.userPhoto.setImageURI(photo);
+//            }
+//        }
 
         this.userName.setText(userName);
         this.userEmail.setText(userEmail);
-
+        /*if(userPhoto != null){
+            this.userPhoto.setImageURI(userPhoto);
+            Log.d("helouda", userPhoto.toString());
+        }*/
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -321,11 +341,11 @@ public class EventActivity extends AppCompatActivity
         // Handle navigation view item clicks here.
         int id = item.getItemId();
 
-        if (id == R.id.nav_camera) {
+        if (id == R.id.myEvents) {
             // Handle the camera action
-        } else if (id == R.id.nav_gallery) {
+        } else if (id == R.id.favorites) {
 
-        } else if (id == R.id.nav_slideshow) {
+        } else if (id == R.id.friends) {
 
         } else if (id == R.id.nav_logout) {
             FirebaseAuth.getInstance().signOut();
@@ -342,17 +362,6 @@ public class EventActivity extends AppCompatActivity
         return true;
     }
 
-    public void star(View view) {
-
-        if(view.isActivated()){
-            view.setActivated(false);
-        }else{
-            view.setActivated(true);
-            Toast.makeText(this, "Añadiendo a favoritos", Snackbar.LENGTH_LONG).show();
-
-        }
-
-    }
     private void info(Integer position) {
         Intent i = new Intent(this, InfoActivity.class);
         Event event = (Event) eventlist.getItemAtPosition(position);
@@ -361,11 +370,7 @@ public class EventActivity extends AppCompatActivity
         this.startActivity(i);
     }
 
-    private void logout() {
-        Intent i = new Intent(this, LoginActivity.class);
 
-        startActivity(i);
-    }
     public void getAllDocs() {
         // [START get_multiple_all]
         eventAdapter.clear();

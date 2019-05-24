@@ -187,7 +187,6 @@
         android:layout_width="317dp"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-
         android:layout_weight="1">
 
         <Button

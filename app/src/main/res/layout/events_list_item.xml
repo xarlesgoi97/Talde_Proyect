@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:minHeight="?attr/listPreferredItemHeight"
     android:orientation="vertical"
-
+    android:padding="10dp"
 
     >
 
@@ -27,9 +27,6 @@
                 />
 
         </LinearLayout>
-
-
-
 
 
         <LinearLayout
@@ -68,7 +65,6 @@
                 android:id="@+id/compartir"
                 android:layout_width="185dp"
                 android:layout_height="wrap_content"
-                android:onClick="compartir"
                 app:srcCompat="@drawable/ic_menu_share"
 
                 />
@@ -77,7 +73,6 @@
                 android:id="@+id/star"
                 android:layout_width="181dp"
                 android:layout_height="wrap_content"
-                android:onClick="star"
                 app:srcCompat="@drawable/star_selector" />
         </LinearLayout>
 
@@ -88,8 +83,6 @@
         android:layout_height="match_parent"
         android:orientation="vertical"
         android:visibility="gone"
-
-
         >
 
         <TextView
