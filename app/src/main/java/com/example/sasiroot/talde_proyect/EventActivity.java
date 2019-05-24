@@ -42,6 +42,8 @@ import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.Query;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
@@ -68,6 +70,7 @@ public class EventActivity extends AppCompatActivity
     protected DocumentReference docRef;
     protected CollectionReference eventsData;
     private FirebaseUser user;
+    private SearchView searchView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -135,7 +138,7 @@ public class EventActivity extends AppCompatActivity
             }
         });
 
-        if (userEmail.compareTo("gotzongalletebeitia95@gmail.com")==0){
+        if (userEmail.compareTo("gotzongalletebeitia95@gmail.com")==0 || userEmail.compareTo("thewinnerboss@gmail.com")==0){
             fab.setVisibility(View.VISIBLE);
 
         }else{
@@ -145,12 +148,18 @@ public class EventActivity extends AppCompatActivity
         eventlist.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+
+                searchView.setQuery("", false);
+                searchView.clearFocus();
+                searchView.onActionViewCollapsed();
+
                 info(position);
+
             }
 
 
         });
-        if (userEmail.compareTo("gotzongalletebeitia95@gmail.com")==0) {
+        if (userEmail.compareTo("gotzongalletebeitia95@gmail.com")==0  || userEmail.compareTo("thewinnerboss@gmail.com")==0 ) {
             eventlist.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
                 @Override
                 public boolean onItemLongClick(AdapterView<?> adapterView, View view, final int position, long l) {
@@ -250,18 +259,38 @@ public class EventActivity extends AppCompatActivity
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.search_menu, menu);
         MenuItem item = menu.findItem(R.id.action_search);
-        SearchView searchView = (SearchView) item.getActionView();
+        this.searchView = (SearchView) item.getActionView();
+
+
 
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String s) {
-                return false;
+
+
+             return false;
             }
 
             @Override
             public boolean onQueryTextChange(String s) {
 
-                return true;
+                eventsData = db.collection("events");
+                Query q = eventsData.orderBy("title").startAt(s.trim()).endAt(s.trim() + "\uf8ff"); // name - the field for which you want to make search
+                q.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        List<Event> names = new ArrayList<>();
+                        if(task.isSuccessful()){
+                            for(QueryDocumentSnapshot document : task.getResult()) {
+                                Event model = document.toObject(Event.class);
+                                names.add(model);
+                            }
+                            eventAdapter = new EventsAdapter(EventActivity.this, names);
+                            eventlist.setAdapter(eventAdapter);
+                        }
+                    }
+                });
+                return false;
             }
         });
 
@@ -338,7 +367,10 @@ public class EventActivity extends AppCompatActivity
     public void getAllDocs() {
         // [START get_multiple_all]
         eventAdapter.clear();
+        eventAdapter = new EventsAdapter(this,events);
+        eventlist.setAdapter(eventAdapter);
         db = FirebaseFirestore.getInstance();
+        //this.eventAdapter
         db.collection("events").get()
                 .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
                     @Override
