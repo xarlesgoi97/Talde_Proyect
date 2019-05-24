@@ -149,7 +149,7 @@ public class EventActivity extends AppCompatActivity
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
-                searchView.setQuery("", false);
+
                 searchView.clearFocus();
                 searchView.onActionViewCollapsed();
 
@@ -227,6 +227,7 @@ public class EventActivity extends AppCompatActivity
     @Override
     protected void onResume() {
         super.onResume();
+
         getAllDocs();
 
     }
@@ -285,6 +286,7 @@ public class EventActivity extends AppCompatActivity
                                 Event model = document.toObject(Event.class);
                                 names.add(model);
                             }
+                            eventAdapter.clear();
                             eventAdapter = new EventsAdapter(EventActivity.this, names);
                             eventlist.setAdapter(eventAdapter);
                         }
